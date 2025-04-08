@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp"
+        tools:layout_editor_absoluteX="25dp"
+        tools:layout_editor_absoluteY="-16dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:fontFamily="sans-serif-condensed-medium"
+            android:text="@string/title"
+            android:textColor="@color/black"
+
+            android:textSize="18pt"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.06" />
+
+        <LinearLayout
+            android:id="@+id/movie_name_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title">
+
+            <TextView
+                android:id="@+id/movie_name_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="@string/movie_name_label"
+                android:textAlignment="center"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textColor="@color/gray"
+                android:textSize="8pt" />
+
+            <EditText
+                android:id="@+id/movie_name_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/default_hint"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:textSize="10pt"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/movie_hall_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/movie_name_view">
+
+            <TextView
+                android:id="@+id/movie_hall_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="@string/movie_hall_label"
+                android:textAlignment="center"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textColor="@color/gray"
+                android:textSize="8pt" />
+
+            <EditText
+                android:id="@+id/movie_hall_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/default_hint"
+                android:inputType="number"
+                android:digits="0123456789"
+                android:maxLength="2"
+                android:minHeight="48dp"
+                android:textSize="10pt"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/movie_date_view"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@+id/movie_hall_view"
+            app:layout_constraintTop_toBottomOf="@+id/movie_hall_view">
+
+            <TextView
+                android:id="@+id/movie_date_label"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+
+                android:text="@string/movie_date_label"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textColor="@color/gray"
+                android:textSize="8pt" />
+
+            <EditText
+                android:id="@+id/movie_date_field"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/default_hint"
+                android:inputType="date"
+                android:digits="0123456789."
+                android:maxLength="5"
+                android:minHeight="48dp"
+                android:textSize="10pt"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/movie_time_view"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/movie_hall_view"
+            app:layout_constraintTop_toBottomOf="@+id/movie_hall_view">
+
+            <TextView
+                android:id="@+id/movie_time_label"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+
+                android:text="@string/movie_time_label"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textColor="@color/gray"
+                android:textSize="8pt" />
+
+            <EditText
+                android:id="@+id/movie_time_field"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/default_hint"
+                android:inputType="time"
+                android:digits="0123456789:"
+                android:maxLength="5"
+                android:minHeight="48dp"
+                android:textSize="10pt"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/movie_row_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/movie_date_view">
+
+            <TextView
+                android:id="@+id/movie_row_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="@string/movie_row_label"
+                android:textAlignment="center"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textColor="@color/gray"
+                android:textSize="8pt" />
+
+            <EditText
+                android:id="@+id/movie_row_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/default_hint"
+                android:inputType="number"
+                android:digits="0123456789"
+                android:maxLength="2"
+                android:minHeight="48dp"
+                android:textSize="10pt"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/movie_place_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/movie_row_view">
+
+            <TextView
+                android:id="@+id/movie_place_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="@string/movie_place_label"
+                android:textAlignment="center"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textColor="@color/gray"
+                android:textSize="8pt" />
+
+            <EditText
+                android:id="@+id/movie_place_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/default_hint"
+                android:inputType="number"
+                android:digits="0123456789,"
+                android:minHeight="48dp"
+                android:textSize="10pt"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/done_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="56dp"
+            android:text="@string/done_btn_text"
+
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textSize="8pt"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_rounded"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/movie_place_view" />
+
+        <Button
+            android:id="@+id/clear_btn"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="52dp"
+            android:text="@string/clear_btn_text"
+
+            android:fontFamily="sans-serif-condensed-medium"
+            android:textSize="8pt"
+            android:textColor="@color/white"
+            android:background="@drawable/clear_btn"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/done_btn" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
