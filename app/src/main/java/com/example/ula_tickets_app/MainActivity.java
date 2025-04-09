@@ -1,6 +1,8 @@
 package com.example.ula_tickets_app;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,15 +10,19 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import android.graphics.pdf.PdfDocument;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.GridLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -71,26 +77,110 @@ public class MainActivity extends AppCompatActivity {
             hall_places = findViewById(R.id.movie_place_field)
         };
 
+        movie_date.setOnClickListener(v -> {
+            showDatePickerDialog();
+        });
+
+        movie_time.setOnClickListener(v -> {
+            showTimePickerDialog();
+        });
+
         clear_btn.setOnClickListener(v -> {
             try {
-                for(int i = 0; i <= fields.length; i++)
+                for(int i = 0; i <= fields.length; i++){
                     fields[i].setText(null);
+                    movie_date.setText(R.string.dateTime_val_hint);
+                    movie_time.setText(R.string.dateTime_val_hint);
+
+                    movie_date.setTextSize(18);
+                    movie_time.setTextSize(18);
+
+                }
             } catch (Exception e) {
                 Log.d(e.toString(), "clear error");
             }
         });
 
         done_btn.setOnClickListener(v -> {
-            createPDF(
-                    movie_name.getText().toString(),
-                    movie_hall.getText().toString(),
-                    movie_date.getText().toString(),
-                    movie_time.getText().toString(),
-                    hall_row.getText().toString(),
-                    hall_places.getText().toString()
-            );
+            try {
+                createPDF(
+                        movie_name.getText().toString(),
+                        movie_hall.getText().toString(),
+                        movie_date.getText().toString(),
+                        movie_time.getText().toString(),
+                        hall_row.getText().toString(),
+                        hall_places.getText().toString()
+                );
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
     }
+
+    // --------------------------------------------- Date picker -----------------------
+
+    private Calendar selectedDate = Calendar.getInstance();
+
+    private void showDatePickerDialog() {
+        int year = selectedDate.get(Calendar.YEAR);
+        int month = selectedDate.get(Calendar.MONTH);
+        int day = selectedDate.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        selectedDate.set(year, month, dayOfMonth);
+                        updateSelectedDateText();
+                    }
+                },
+                year, month, day
+        );
+
+        datePickerDialog.show();
+    }
+
+    private void updateSelectedDateText() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM", Locale.getDefault());
+        String formattedDate = dateFormat.format(selectedDate.getTime());
+        movie_date.setText(formattedDate);
+        movie_date.setTextSize(24);
+    }
+
+// --------------------------------------------- Time picker -----------------------
+
+    private Calendar selectedTime = Calendar.getInstance();
+    private void showTimePickerDialog() {
+        int hour = selectedTime.get(Calendar.HOUR_OF_DAY);
+        int minute = selectedTime.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+                this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        selectedTime.set(Calendar.MINUTE, minute);
+                        updateSelectedTimeText();
+                    }
+                },
+                hour, minute, true // true - 24-часовой формат, false - AM/PM
+        );
+
+        timePickerDialog.show();
+    }
+
+    private void updateSelectedTimeText() {
+        String formattedTime = String.format(Locale.getDefault(), "%02d:%02d",
+                selectedTime.get(Calendar.HOUR_OF_DAY),
+                selectedTime.get(Calendar.MINUTE));
+        movie_time.setText(formattedTime);
+        movie_time.setTextSize(24);
+    }
+
+    // --------------------------------------------- Text splitter -----------------------
+
 
     public static String[] splitStringByLastSpace(String input, int maxLength) {
         if (input == null || input.length() <= maxLength) {
@@ -108,6 +198,8 @@ public class MainActivity extends AppCompatActivity {
 
         return new String[]{firstPart, secondPart};
     }
+
+    // --------------------------------------------- PDF creator -----------------------
 
     private void createPDF(String name, String hall, String date, String time, String row, String place) {
         Date now = new Date();
@@ -137,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
         PdfDocument.Page page_1 = document.startPage(pageInfo);
 
         File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        String fileName = "БИЛЕТ_В_КИНО.pdf";
+        String fileName = "Ticket.pdf";
 
         Canvas canvas = page_1.getCanvas();
 
@@ -196,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/БИЛЕТ_В_КИНО.pdf";
+        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/Ticket.pdf";
         PDFOpener.openPdf(MainActivity.this, pdfPath);
     }
 }

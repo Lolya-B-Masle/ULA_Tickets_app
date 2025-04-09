@@ -1,20 +1,20 @@
 <resources>
-    <string name="app_name">ULA_Tickets_app</string>
+    <string name="app_name">Юла билет</string>
 
     <string name="title">Создание билета</string>
     <string name="movie_name_label">Название фильма</string>
     <string name="movie_hall_label">Зал</string>
-    <string name="movie_date_label">Дата</string>
-    <string name="movie_time_label">Время</string>
+    <string name="movie_date_label">Дата:</string>
+    <string name="movie_time_label">Время:</string>
     <string name="movie_row_label">Ряд</string>
     <string name="movie_place_label">Место / места</string>
     <string name="person_label">Фамилия</string>
 
     <string name="done_btn_text">Готово</string>
     <string name="clear_btn_text">Очистить</string>
+    <string name="history_btn_text">История</string>
 
     <string name="default_hint">---</string>
 
-    <string name="date_val_hint">Выбрать</string>
-    <string name="time_val_hint">Выбрать</string>
+    <string name="dateTime_val_hint">Выбрать ▼</string>
 </resources>
