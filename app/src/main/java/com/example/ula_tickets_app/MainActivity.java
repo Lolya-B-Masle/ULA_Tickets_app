@@ -39,7 +39,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     TextView movie_name, movie_hall, movie_date, movie_time, hall_row, hall_places;
-    Button done_btn, clear_btn;
+    Button done_btn, clear_btn, history_btn;
     Bitmap bmp, bmp_r, divider, bg, scaledDivider, scaledBitmap, scaledBitmap_r, scaledBg;
 
     @Override
@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         done_btn = findViewById(R.id.done_btn);
         clear_btn = findViewById(R.id.clear_btn);
+        history_btn = findViewById(R.id.history_btn);
 
         TextView[] fields = {
             movie_name = findViewById(R.id.movie_name_field),
@@ -99,6 +100,10 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Log.d(e.toString(), "clear error");
             }
+        });
+
+        history_btn.setOnClickListener(v -> {
+            Toast.makeText(this, "Опция находится в разработке...", Toast.LENGTH_LONG).show();
         });
 
         done_btn.setOnClickListener(v -> {
@@ -237,6 +242,11 @@ public class MainActivity extends AppCompatActivity {
         labelPaint.setColor(Color.BLACK);
         labelPaint.setTextSize(35);
 
+        Paint majorPaint = new Paint();
+        majorPaint.setColor(Color.BLACK);
+        majorPaint.setTextSize(85);
+        majorPaint.setFakeBoldText(true);
+
         Paint textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
         textPaint.setTextSize(80);
@@ -253,23 +263,23 @@ public class MainActivity extends AppCompatActivity {
         canvas.drawText(ticketDate, 12, 35, detailsPaint);
 
         canvas.drawText(name_str, 60, 560, labelPaint);
-        canvas.drawText(name, 60, 660, textPaint);
-        canvas.drawText(extra_name, 60, 760, textPaint);
+        canvas.drawText(name, 60, 660, majorPaint);
+        canvas.drawText(extra_name, 60, 760, majorPaint);
 
         canvas.drawText(date_str, 60, 920, labelPaint);
         canvas.drawText(date + year.format(now), 210, 920, textPaint);
 
-        canvas.drawText(time_str, 60, 1020, labelPaint);
-        canvas.drawText(time, 210, 1020, textPaint);
+        canvas.drawText(time_str, 60, 1040, labelPaint);
+        canvas.drawText(time, 210, 1040, textPaint);
 
-        canvas.drawText(hall_str, 60, 1220, labelPaint);
-        canvas.drawText(hall, 170, 1220, textPaint);
+        canvas.drawText(hall_str, 60, 1240, labelPaint);
+        canvas.drawText(hall, 170, 1240, textPaint);
 
-        canvas.drawText(row_str, 60, 1320, labelPaint);
-        canvas.drawText(row, 170, 1320, textPaint);
+        canvas.drawText(row_str, 60, 1360, labelPaint);
+        canvas.drawText(row, 170, 1360, textPaint);
 
-        canvas.drawText(place_str, 315, 1320, labelPaint);
-        canvas.drawText(place, 465, 1320, textPaint);
+        canvas.drawText(place_str, 315, 1360, labelPaint);
+        canvas.drawText(place, 465, 1360, textPaint);
 
         canvas.drawBitmap(scaledDivider, 80, 370, labelPaint);
 
@@ -281,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
             document.writeTo(fos);
             document.close();
             fos.close();
-            Toast.makeText(this, "done!!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Создание документа завершено!", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
