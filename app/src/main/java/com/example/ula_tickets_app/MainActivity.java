@@ -85,12 +85,17 @@ public class MainActivity extends AppCompatActivity {
         });
 
         history_btn.setOnClickListener(v -> {
-            Toast.makeText(this, "Опция находится в разработке...", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Опция находится в разработке...", Toast.LENGTH_SHORT).show();
         });
 
         done_btn.setOnClickListener(v -> {
-            createPDF();
-            openPDF();
+            if (movie_name.getText().toString().isEmpty() || movie_hall.getText().toString().isEmpty() || movie_date.getText().toString().isEmpty() ||
+                    movie_time.getText().toString().isEmpty() || hall_row.getText().toString().isEmpty() || hall_places.getText().toString().isEmpty()) {
+                Toast.makeText(this, "Для создания билета необходимо заполнить все поля", Toast.LENGTH_SHORT).show();
+            } else {
+                createPDF();
+                openPDF();
+            }
         });
     }
 
@@ -212,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openPDF() {
-        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/TU.pdf";
+        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/БИЛЕТ_В_КИНО.pdf";
         PDFOpener.openPdf(MainActivity.this, pdfPath);
     }
 }

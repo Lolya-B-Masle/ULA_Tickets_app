@@ -62,11 +62,6 @@ public class PDFOpener {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getString(KEY_SELECTED_APP, null);
     }
-
-    public static void saveAppChoice(Context context, String packageName) {
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        prefs.edit().putString(KEY_SELECTED_APP, packageName).apply();
-    }
 }
 
 

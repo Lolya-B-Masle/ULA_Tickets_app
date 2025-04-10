@@ -10,8 +10,8 @@
     <string name="person_label">Фамилия</string>
 
     <string name="done_btn_text">✅ Готово</string>
-    <string name="clear_btn_text">🔄 Очистить</string>
-    <string name="history_btn_text">📜 История</string>
+    <string name="clear_btn_text">🔄</string>
+    <string name="history_btn_text">📜</string>
 
     <string name="default_hint">- 📋 -</string>
 

@@ -270,8 +270,8 @@
 
             <Button
                 android:id="@+id/clear_btn"
-                android:layout_width="140dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="52dp"
                 android:background="@drawable/clear_btn"
 
@@ -285,8 +285,8 @@
 
             <Button
                 android:id="@+id/history_btn"
-                android:layout_width="140dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="56dp"
 
                 android:background="@drawable/clear_btn"

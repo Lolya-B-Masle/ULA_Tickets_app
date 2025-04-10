@@ -27,7 +27,6 @@ public class PDFCreator {
     final PdfDocument.Page page = document.startPage(pageInfo);
     private final Canvas canvas = page.getCanvas();
     private final File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-    private final String fileName = "TU.pdf";
     private final Date now = new Date();
     private final SimpleDateFormat ticket_date = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
     private final SimpleDateFormat movie_year = new SimpleDateFormat(".yyyy", Locale.getDefault());
@@ -78,7 +77,7 @@ public class PDFCreator {
         paint.setColor(Color.LTGRAY);
         paint.setTextSize(35);
 
-        canvas.drawText("Билет от:  " + ticket_date.format(now), 12, 35, paint);
+        canvas.drawText(ticket_date.format(now), 12, 35, paint);
     }
 
     protected void setMovieDateTime(String date_value, String time_value) {
@@ -111,6 +110,7 @@ public class PDFCreator {
 
         document.finishPage(page);
 
+        String fileName = "БИЛЕТ_В_КИНО.pdf";
         File file = new File(downloadDir, fileName);
 
         try {
@@ -118,7 +118,7 @@ public class PDFCreator {
             document.writeTo(fos);
             document.close();
             fos.close();
-            Toast.makeText(context, "Создание документа завершено!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Создание билета завершено!", Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
