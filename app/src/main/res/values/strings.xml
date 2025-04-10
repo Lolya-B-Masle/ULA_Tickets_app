@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Юла билет</string>
 
     <string name="title">Создание билета</string>
     <string name="movie_name_label">Название фильма</string>
@@ -16,5 +15,6 @@
 
     <string name="default_hint">- 📋 -</string>
 
-    <string name="dateTime_val_hint">Выбрать ▼</string>
+    <string name="dateTime_val_hint">Выбрать ▽</string>
+    <string name="app_name">Юла билет</string>
 </resources>
