@@ -208,11 +208,10 @@
                     android:id="@+id/movie_row_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="0123456789"
+                    android:digits="0123456789,"
                     android:ems="10"
                     android:hint="@string/default_hint"
                     android:inputType="number"
-                    android:maxLength="2"
                     android:minHeight="48dp"
                     android:textAlignment="center"
                     android:textSize="10pt" />

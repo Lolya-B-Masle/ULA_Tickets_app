@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
@@ -40,13 +41,12 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
 
         company_logo = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
         cinema_logo = BitmapFactory.decodeResource(getResources(), R.drawable.rainbow_logo);
         divider = BitmapFactory.decodeResource(getResources(), R.drawable.divider);
         BG = BitmapFactory.decodeResource(getResources(), R.drawable.background);
-
-        ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
 
         done_btn = findViewById(R.id.done_btn);
         clear_btn = findViewById(R.id.clear_btn);
@@ -92,6 +92,24 @@ public class MainActivity extends AppCompatActivity {
             createPDF();
             openPDF();
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("SELECTED_DATE", movie_date.getText().toString());
+        outState.putString("SELECTED_TIME", movie_time.getText().toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        String savedDate = savedInstanceState.getString("SELECTED_DATE");
+        String savedTime = savedInstanceState.getString("SELECTED_TIME");
+        if (savedDate != null) {
+            movie_date.setText(savedDate);
+            movie_time.setText(savedTime);
+        }
     }
 
     // --------------------------------------------- Date picker -----------------------

@@ -78,7 +78,7 @@ public class PDFCreator {
         paint.setColor(Color.LTGRAY);
         paint.setTextSize(35);
 
-        canvas.drawText("Билет от:" + ticket_date.format(now), 12, 35, paint);
+        canvas.drawText("Билет от:  " + ticket_date.format(now), 12, 35, paint);
     }
 
     protected void setMovieDateTime(String date_value, String time_value) {
@@ -99,12 +99,12 @@ public class PDFCreator {
         paint.setTextSize(35);
         canvas.drawText("ЗАЛ:", 60, 1240, paint);
         canvas.drawText("РЯД:", 60, 1360, paint);
-        canvas.drawText("МЕСТО:", 315, 1360, paint);
+        canvas.drawText("МЕСТО:", 60, 1480, paint);
 
         paint.setTextSize(75);
-        canvas.drawText(hall_value, 170, 1240, paint);
-        canvas.drawText(row_value, 170, 1360, paint);
-        canvas.drawText(place_value, 465, 1360, paint);
+        canvas.drawText(hall_value, 220, 1240, paint);
+        canvas.drawText(row_value, 220, 1360, paint);
+        canvas.drawText(place_value, 220, 1480, paint);
     }
 
     public void createPDF(Context context) {
