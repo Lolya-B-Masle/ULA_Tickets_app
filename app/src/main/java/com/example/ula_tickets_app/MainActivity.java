@@ -29,7 +29,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     TextView movie_name, movie_hall, movie_date, movie_time, hall_row, hall_places;
     Button done_btn, clear_btn, history_btn;
-    Bitmap company_logo, cinema_logo, divider, BG;
+    Bitmap company_logo, cinema_logo, divider, BG, ticket_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         cinema_logo = BitmapFactory.decodeResource(getResources(), R.drawable.rainbow_logo);
         divider = BitmapFactory.decodeResource(getResources(), R.drawable.divider);
         BG = BitmapFactory.decodeResource(getResources(), R.drawable.background);
+        ticket_text = BitmapFactory.decodeResource(getResources(), R.drawable.ticket_text);
 
         done_btn = findViewById(R.id.done_btn);
         clear_btn = findViewById(R.id.clear_btn);
@@ -206,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         PDF.setCinemaLogo(cinema_logo);
         PDF.setCompanyLogo(company_logo);
         PDF.setDivider(divider);
+        //PDF.setBitmap(ticket_text, 664, 395, 60, 1520);
 
         PDF.setMovieName(splitStringByLastSpace(movie_name.getText().toString(), 20));
         PDF.setMovieDateTime(movie_date.getText().toString(), movie_time.getText().toString());
@@ -217,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openPDF() {
-        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/БИЛЕТ_В_КИНО.pdf";
+        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/Ticket.pdf";
         PDFOpener.openPdf(MainActivity.this, pdfPath);
     }
 }

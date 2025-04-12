@@ -65,10 +65,10 @@ public class PDFCreator {
 
         paint.setTextSize(80);
         paint.setFakeBoldText(true);
-        canvas.drawText(movie_name[0], 60, 660, paint);
+        canvas.drawText(movie_name[0].toUpperCase().trim(), 60, 660, paint);
 
         if (movie_name.length == 2)
-            canvas.drawText(movie_name[1], 60, 760, paint);
+            canvas.drawText(movie_name[1].toUpperCase().trim(), 60, 760, paint);
 
         paint.setFakeBoldText(false);
     }
@@ -83,34 +83,38 @@ public class PDFCreator {
     protected void setMovieDateTime(String date_value, String time_value) {
         paint.setColor(Color.BLACK);
 
-        paint.setTextSize(35);
+        paint.setTextSize(45);
         canvas.drawText("ДАТА:", 60, 920, paint);
         canvas.drawText("ВРЕМЯ:", 60, 1040, paint);
 
-        paint.setTextSize(75);
-        canvas.drawText(date_value + movie_year.format(now), 210, 920, paint);
-        canvas.drawText(time_value, 210, 1040, paint);
+        paint.setTextSize(85);
+        paint.setFakeBoldText(true);
+        canvas.drawText(date_value + movie_year.format(now), 240, 920, paint);
+        canvas.drawText(time_value, 240, 1040, paint);
+        paint.setFakeBoldText(false);
     }
 
     protected void setMoviePlace(String hall_value, String row_value, String place_value) {
         paint.setColor(Color.BLACK);
 
-        paint.setTextSize(35);
-        canvas.drawText("ЗАЛ:", 60, 1240, paint);
-        canvas.drawText("РЯД:", 60, 1360, paint);
-        canvas.drawText("МЕСТО:", 60, 1480, paint);
+        paint.setTextSize(45);
+        canvas.drawText("ЗАЛ:", 60, 1230, paint);
+        canvas.drawText("РЯД:", 60, 1350, paint);
+        canvas.drawText("МЕСТО:", 60, 1470, paint);
 
-        paint.setTextSize(75);
-        canvas.drawText(hall_value, 220, 1240, paint);
-        canvas.drawText(row_value, 220, 1360, paint);
-        canvas.drawText(place_value, 220, 1480, paint);
+        paint.setTextSize(85);
+        paint.setFakeBoldText(true);
+        canvas.drawText(hall_value.trim(), 240, 1230, paint);
+        canvas.drawText(row_value.trim(), 240, 1350, paint);
+        canvas.drawText(place_value.trim(), 240, 1470, paint);
+        paint.setFakeBoldText(false);
     }
 
     public void createPDF(Context context) {
 
         document.finishPage(page);
 
-        String fileName = "БИЛЕТ_В_КИНО.pdf";
+        String fileName = "Ticket.pdf";
         File file = new File(downloadDir, fileName);
 
         try {
