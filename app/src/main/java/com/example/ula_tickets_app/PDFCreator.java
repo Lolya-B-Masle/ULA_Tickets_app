@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import java.text.SimpleDateFormat;
+import java.util.Random;
 
 public class PDFCreator {
     final PdfDocument document = new PdfDocument();
@@ -32,6 +33,7 @@ public class PDFCreator {
     private final SimpleDateFormat movie_year = new SimpleDateFormat(".yyyy", Locale.getDefault());
     private final Paint paint = new Paint();
 
+    Random rand = new Random();
     protected void setBG(Bitmap BG) {
         Bitmap BG_scaled = Bitmap.createScaledBitmap(BG, 1080, 1920, false);
         canvas.drawBitmap(BG_scaled, 0, 0, paint);
@@ -110,12 +112,12 @@ public class PDFCreator {
         paint.setFakeBoldText(false);
     }
 
-    public void createPDF(Context context) {
+    public void createPDF(Context context, String fileName) {
 
         document.finishPage(page);
 
-        String fileName = "Ticket.pdf";
         File file = new File(downloadDir, fileName);
+
 
         try {
             FileOutputStream fos = new FileOutputStream(file);

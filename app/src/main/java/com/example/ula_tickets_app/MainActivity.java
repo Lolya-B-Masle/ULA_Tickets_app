@@ -3,6 +3,7 @@ package com.example.ula_tickets_app;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
+
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
 
         company_logo = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
@@ -86,7 +90,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         history_btn.setOnClickListener(v -> {
-            Toast.makeText(this, "Опция находится в разработке...", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Опция находится в разработке...", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, History.class);
+            startActivity(intent);
         });
 
         done_btn.setOnClickListener(v -> {
@@ -152,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
 // --------------------------------------------- Time picker -----------------------
 
     private final Calendar selectedTime = Calendar.getInstance();
+
     private void showTimePickerDialog() {
         int hour = selectedTime.get(Calendar.HOUR_OF_DAY);
         int minute = selectedTime.get(Calendar.MINUTE);
@@ -199,6 +206,9 @@ public class MainActivity extends AppCompatActivity {
 
     // --------------------------------------------- PDF creator -----------------------
 
+    double randomNum = (Math.random() * 10);
+    String fileName = "Ticket-"+ randomNum +".pdf";
+
     private void createPDF() {
         PDFCreator PDF = new PDFCreator();
 
@@ -207,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         PDF.setCinemaLogo(cinema_logo);
         PDF.setCompanyLogo(company_logo);
         PDF.setDivider(divider);
-        //PDF.setBitmap(ticket_text, 664, 395, 60, 1520);
+        PDF.setBitmap(ticket_text, 704, 445, 60, 1470);
 
         PDF.setMovieName(splitStringByLastSpace(movie_name.getText().toString(), 20));
         PDF.setMovieDateTime(movie_date.getText().toString(), movie_time.getText().toString());
@@ -215,11 +225,11 @@ public class MainActivity extends AppCompatActivity {
 
         PDF.setTicket_date();
 
-        PDF.createPDF(getApplicationContext());
+        PDF.createPDF(getApplicationContext(), fileName);
     }
 
     private void openPDF() {
-        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/Ticket.pdf";
+        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/"+fileName;
         PDFOpener.openPdf(MainActivity.this, pdfPath);
     }
 }

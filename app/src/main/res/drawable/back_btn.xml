@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Обычное состояние -->
+    <item>
+        <shape
+            android:shape="rectangle">
+
+            <!-- Цвет фона -->
+            <solid android:color="@color/gray" />
+
+            <!-- Скругление углов -->
+            <corners android:radius="50dp" />
+        </shape>
+    </item>
+</selector>

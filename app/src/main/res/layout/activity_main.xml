@@ -270,26 +270,27 @@
 
             <Button
                 android:id="@+id/clear_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="52dp"
-                android:background="@drawable/clear_btn"
+                android:layout_marginTop="200dp"
 
+                android:background="@drawable/clear_btn"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="@string/clear_btn_text"
                 android:textColor="@color/white"
-                android:textSize="8pt"
 
+                android:textSize="8pt"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/done_btn"
-                app:layout_constraintTop_toBottomOf="@+id/done_btn" />
+                app:layout_constraintTop_toBottomOf="@+id/history_btn" />
 
             <Button
                 android:id="@+id/history_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="56dp"
+                android:layout_marginTop="40dp"
 
-                android:background="@drawable/clear_btn"
+                android:background="@drawable/btn_rounded"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="@string/history_btn_text"
                 android:textColor="@color/white"
@@ -297,6 +298,21 @@
                 android:textSize="8pt"
                 app:layout_constraintEnd_toEndOf="@+id/done_btn"
                 app:layout_constraintTop_toBottomOf="@+id/done_btn" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="@string/app_version"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/l2_gray"
+                android:padding="1dp"
+
+                app:layout_constraintStart_toStartOf="@+id/title"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
