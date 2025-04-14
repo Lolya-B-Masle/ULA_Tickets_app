@@ -91,8 +91,8 @@ public class PDFCreator {
 
         paint.setTextSize(85);
         paint.setFakeBoldText(true);
-        canvas.drawText(date_value + movie_year.format(now), 240, 920, paint);
-        canvas.drawText(time_value, 240, 1040, paint);
+        canvas.drawText(date_value + movie_year.format(now), 260, 920, paint);
+        canvas.drawText(time_value, 260, 1040, paint);
         paint.setFakeBoldText(false);
     }
 
@@ -106,9 +106,9 @@ public class PDFCreator {
 
         paint.setTextSize(85);
         paint.setFakeBoldText(true);
-        canvas.drawText(hall_value.trim(), 240, 1230, paint);
-        canvas.drawText(row_value.trim(), 240, 1350, paint);
-        canvas.drawText(place_value.trim(), 240, 1470, paint);
+        canvas.drawText(hall_value.trim(), 260, 1230, paint);
+        canvas.drawText(row_value.trim(), 260, 1350, paint);
+        canvas.drawText(place_value.trim(), 260, 1470, paint);
         paint.setFakeBoldText(false);
     }
 

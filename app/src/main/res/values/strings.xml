@@ -1,5 +1,4 @@
 <resources>
-
     <string name="app_version">V1.05</string>
 
     <string name="title">Создание билета</string>
@@ -14,15 +13,13 @@
     <string name="movie_place_label">Место / места</string>
     <string name="person_label">Фамилия</string>
 
-    <string name="done_btn_text">✅ Готово</string>
-    <string name="clear_btn_text">🔄 Очистить</string>
-    <string name="history_btn_text">📜 История</string>
+    <string name="submit_btn">✅ Готово</string>
+    <string name="clear_btn">🗑️ Очистить</string>
+    <string name="history_btn">📜 История</string>
+    <string name="search_btn">🔍 Найти</string>
+    <string name="back_btn">✖️️️</string>
 
-    <string name="history_btn_clear">🗑️ Очистить</string>
-    <string name="history_btn_search">🔍 Найти</string>
-    <string name="history_btn_back">✖️️️</string>
-
-    <string name="default_hint">- 📋 -</string>
+    <string name="default_hint">- 📝 -</string>
     <string name="scrollView_desc">История пуста...</string>
 
     <string name="dateTime_val_hint">Выбрать ▽</string>

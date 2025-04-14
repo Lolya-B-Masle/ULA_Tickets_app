@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
         history_btn.setOnClickListener(v -> {
             //Toast.makeText(this, "Опция находится в разработке...", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(MainActivity.this, History.class);
+            Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
             startActivity(intent);
         });
 

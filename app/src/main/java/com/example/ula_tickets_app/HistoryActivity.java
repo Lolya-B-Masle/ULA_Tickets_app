@@ -5,21 +5,20 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class History extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity {
 
-    Button exit;
+    Button exit_btn, clear_btn, search_btn;
 
     LinearLayout item_list;
 
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@NonNull Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_history);
@@ -29,12 +28,12 @@ public class History extends AppCompatActivity {
             return insets;
         });
 
-        exit = findViewById(R.id.exit_btn);
-        item_list = findViewById(R.id.item_list);
+        exit_btn = findViewById(R.id.exit_btn);
+        clear_btn = findViewById(R.id.clear_btn);
+        search_btn = findViewById(R.id.search_btn);
+        //item_list = findViewById(R.id.item_list);
 
-        exit.setOnClickListener(v -> {
-            finish();
-        });
+        exit_btn.setOnClickListener(v ->  finish());
 
 
     }
