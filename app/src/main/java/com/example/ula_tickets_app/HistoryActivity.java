@@ -18,7 +18,7 @@ public class HistoryActivity extends AppCompatActivity {
     LinearLayout item_list;
 
     @Override
-    protected void onCreate(@NonNull Bundle savedInstanceState) {
+    protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_history);
