@@ -8,13 +8,18 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -25,12 +30,35 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class MainActivity extends AppCompatActivity {
-    TextView movie_name, movie_hall, movie_date, movie_time, hall_row, hall_places;
+    TextView movie_hall, movie_date, movie_time, hall_row, hall_places;
+    Spinner movie_name;
     Button done_btn, clear_btn, history_btn;
+    ImageView settings_btn;
     Bitmap company_logo, cinema_logo, divider, BG, ticket_text;
+    private final String cssQuery = "div.col-sm-6.col-md-4.col-lg-3.movies-item", query = "h6.h6.mb-2";
+    private final String sourceURL = "https://perviymall.ru/radugarub/kino/";
+    private final String userAgent = "Chrome/96.0.4664.93 Safari/537.36", referrer = "https://google.com";
+
+    ExecutorService executor = new ThreadPoolExecutor(
+            2,
+            4,
+            60, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<>(50)
+    );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +71,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-
-
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
 
         company_logo = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
@@ -56,9 +82,42 @@ public class MainActivity extends AppCompatActivity {
         done_btn = findViewById(R.id.done_btn);
         clear_btn = findViewById(R.id.clear_btn);
         history_btn = findViewById(R.id.history_btn);
+        movie_name = findViewById(R.id.movie_name_field);
+        settings_btn = findViewById(R.id.settings_btn);
+
+        List<String> items = new ArrayList<>();
+        executor.execute(() ->{
+            try {
+                Document doc = Jsoup.connect(sourceURL)
+                        .userAgent(userAgent)
+                        .referrer(referrer)
+                        .get();
+
+                Elements listNews = doc.select(cssQuery);
+
+                for (Element element : listNews.select(query))
+                    items.add(element.text());
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            runOnUiThread(() -> {
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        items
+                );
+
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                movie_name.setAdapter(adapter);
+
+            });
+        });
+        executor.shutdown();
 
         TextView[] fields = {
-            movie_name = findViewById(R.id.movie_name_field),
             movie_hall = findViewById(R.id.movie_hall_field),
             movie_date = findViewById(R.id.movie_date_field),
             movie_time = findViewById(R.id.movie_time_field),
@@ -96,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         done_btn.setOnClickListener(v -> {
-            if (movie_name.getText().toString().isEmpty() || movie_hall.getText().toString().isEmpty() || movie_date.getText().toString().isEmpty() ||
+            if (movie_hall.getText().toString().isEmpty() || movie_date.getText().toString().isEmpty() ||
                     movie_time.getText().toString().isEmpty() || hall_row.getText().toString().isEmpty() || hall_places.getText().toString().isEmpty()) {
                 Toast.makeText(this, "Для создания билета необходимо заполнить все поля", Toast.LENGTH_SHORT).show();
             } else {
@@ -219,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
         PDF.setDivider(divider);
         PDF.setBitmap(ticket_text, 704, 445, 60, 1470);
 
-        PDF.setMovieName(splitStringByLastSpace(movie_name.getText().toString(), 20));
+        PDF.setMovieName(splitStringByLastSpace(movie_name.getSelectedItem().toString(), 20));
         PDF.setMovieDateTime(movie_date.getText().toString(), movie_time.getText().toString());
         PDF.setMoviePlace(movie_hall.getText().toString(), hall_row.getText().toString(), hall_places.getText().toString());
 
