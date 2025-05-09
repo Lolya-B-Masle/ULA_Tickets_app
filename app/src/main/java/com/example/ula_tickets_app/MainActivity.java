@@ -1,4 +1,5 @@
 package com.example.ula_tickets_app;
+//import static com.example.ula_tickets_app.TicketCreator.generateTicketImage;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
@@ -53,12 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private final String sourceURL = "https://perviymall.ru/radugarub/kino/";
     private final String userAgent = "Chrome/96.0.4664.93 Safari/537.36", referrer = "https://google.com";
 
-    ExecutorService executor = new ThreadPoolExecutor(
-            2,
-            4,
-            60, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(50)
-    );
+    ExecutorService executor = new ThreadPoolExecutor(2, 4, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>(50));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         history_btn.setOnClickListener(v -> {
-            //Toast.makeText(this, "Опция находится в разработке...", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
             startActivity(intent);
         });
@@ -159,8 +154,9 @@ public class MainActivity extends AppCompatActivity {
                     movie_time.getText().toString().isEmpty() || hall_row.getText().toString().isEmpty() || hall_places.getText().toString().isEmpty()) {
                 Toast.makeText(this, "Для создания билета необходимо заполнить все поля", Toast.LENGTH_SHORT).show();
             } else {
-                createPDF();
-                openPDF();
+                createTicket();
+                String message = "Билет сохранён в папке «БИЛЕТЫ_В_КИНО» вашей галереи";
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -263,32 +259,13 @@ public class MainActivity extends AppCompatActivity {
         return new String[]{firstPart, secondPart};
     }
 
-    // --------------------------------------------- PDF creator -----------------------
+    // --------------------------------------------- Image creator -----------------------
 
-    double randomNum = (Math.random() * 10);
-    String fileName = "Ticket-"+ randomNum +".pdf";
-
-    private void createPDF() {
-        PDFCreator PDF = new PDFCreator();
-
-        PDF.setBG(BG);
-
-        PDF.setCinemaLogo(cinema_logo);
-        PDF.setCompanyLogo(company_logo);
-        PDF.setDivider(divider);
-        PDF.setBitmap(ticket_text, 704, 445, 60, 1470);
-
-        PDF.setMovieName(splitStringByLastSpace(movie_name.getSelectedItem().toString(), 20));
-        PDF.setMovieDateTime(movie_date.getText().toString(), movie_time.getText().toString());
-        PDF.setMoviePlace(movie_hall.getText().toString(), hall_row.getText().toString(), hall_places.getText().toString());
-
-        PDF.setTicket_date();
-
-        PDF.createPDF(getApplicationContext(), fileName);
-    }
-
-    private void openPDF() {
-        String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/"+fileName;
-        PDFOpener.openPdf(MainActivity.this, pdfPath);
+    private void createTicket() {
+        TicketCreator ticket = new TicketCreator();
+        ticket.generateTicketImage(this, BG, cinema_logo, company_logo, divider, ticket_text,
+                splitStringByLastSpace(movie_name.getSelectedItem().toString(), 20),
+                movie_date.getText().toString(), movie_time.getText().toString(),
+                hall_row.getText().toString(), hall_places.getText().toString(), movie_hall.getText().toString());
     }
 }

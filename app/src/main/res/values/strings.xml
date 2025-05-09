@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_version">V1.06</string>
+    <string name="app_version">V1.07</string>
 
     <string name="title">Создание билета</string>
     <string name="history_page_title">История</string>
