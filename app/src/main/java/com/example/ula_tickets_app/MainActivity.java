@@ -1,11 +1,12 @@
 package com.example.ula_tickets_app;
-//import static com.example.ula_tickets_app.TicketCreator.generateTicketImage;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -14,12 +15,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -28,16 +31,9 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -50,23 +46,20 @@ public class MainActivity extends AppCompatActivity {
     Button done_btn, clear_btn, history_btn;
     ImageView settings_btn;
     Bitmap company_logo, cinema_logo, divider, BG, ticket_text;
+    DatabaseHelper databaseHelper;
+    SQLiteDatabase db;
+    Cursor userCursor;
+    SimpleCursorAdapter userAdapter;
+    private FrameLayout progressBar;
     private final String cssQuery = "div.col-sm-6.col-md-4.col-lg-3.movies-item", query = "h6.h6.mb-2";
     private final String sourceURL = "https://perviymall.ru/radugarub/kino/";
     private final String userAgent = "Chrome/96.0.4664.93 Safari/537.36", referrer = "https://google.com";
-
-    ExecutorService executor = new ThreadPoolExecutor(2, 4, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<>(50));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
 
         company_logo = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
@@ -80,9 +73,17 @@ public class MainActivity extends AppCompatActivity {
         history_btn = findViewById(R.id.history_btn);
         movie_name = findViewById(R.id.movie_name_field);
         settings_btn = findViewById(R.id.settings_btn);
+        progressBar = findViewById(R.id.progressBar);
 
-        List<String> items = new ArrayList<>();
-        executor.execute(() ->{
+        List<String> movieList = new ArrayList<>();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, movieList);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        movie_name.setAdapter(adapter);
+
+        progressBar.setVisibility(View.VISIBLE);
+        new Thread(() ->{
+
             try {
                 Document doc = Jsoup.connect(sourceURL)
                         .userAgent(userAgent)
@@ -92,26 +93,18 @@ public class MainActivity extends AppCompatActivity {
                 Elements listNews = doc.select(cssQuery);
 
                 for (Element element : listNews.select(query))
-                    items.add(element.text());
+                    movieList.add(element.text());
 
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            runOnUiThread(() -> {
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                        this,
-                        android.R.layout.simple_spinner_item,
-                        items
-                );
-
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                movie_name.setAdapter(adapter);
-
+            runOnUiThread(()->{
+                adapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
             });
-        });
-        executor.shutdown();
+        }).start();
 
         TextView[] fields = {
             movie_hall = findViewById(R.id.movie_hall_field),
@@ -155,6 +148,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Для создания билета необходимо заполнить все поля", Toast.LENGTH_SHORT).show();
             } else {
                 createTicket();
+
+                //createDB(db);
+                //addTicketToHistory(db, movie_name.toString(), ticket_text.toString(), hall_row.toString(), hall_places.toString(), movie_hall.toString(), 120);
+
                 String message = "Билет сохранён в папке «БИЛЕТЫ_В_КИНО» вашей галереи";
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
@@ -178,6 +175,14 @@ public class MainActivity extends AppCompatActivity {
             movie_time.setText(savedTime);
         }
     }
+
+    // --------------------------------------------- DB --------------------------------
+
+    public void addTicketToHistory(SQLiteDatabase db, String movie_name, String ticket_date,
+                                   String hall_row, String hall_place, String hall_number, int ticket_cost) {
+        db.execSQL("INSERT OR IGNORE INTO tickets VALUES (movie_name, ticket_date, hall_row, hall_place, hall_number, ticket_cost);");
+    }
+
 
     // --------------------------------------------- Date picker -----------------------
 

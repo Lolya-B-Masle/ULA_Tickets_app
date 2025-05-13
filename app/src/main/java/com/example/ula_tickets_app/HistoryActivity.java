@@ -35,6 +35,5 @@ public class HistoryActivity extends AppCompatActivity {
 
         exit_btn.setOnClickListener(v ->  finish());
 
-
     }
 }

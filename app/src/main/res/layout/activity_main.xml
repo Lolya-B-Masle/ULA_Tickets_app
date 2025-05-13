@@ -7,6 +7,46 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <FrameLayout
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="5dp"
+        android:background="@color/loading_white"
+        android:visibility="gone"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:orientation="vertical"
+            android:layout_gravity="center">
+
+
+            <ProgressBar
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Загружаю данные..."
+                android:layout_gravity="center"
+                android:textSize="10pt"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
     <ImageView
         android:id="@+id/settings_btn"
         android:layout_width="30dp"
@@ -273,42 +313,41 @@
                 android:id="@+id/done_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="56dp"
-                android:background="@drawable/btn_rounded"
+                android:layout_marginTop="40dp"
 
+                android:background="@drawable/btn_rounded"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:paddingVertical="15dp"
                 android:text="@string/submit_btn"
+
                 android:textColor="@color/white"
 
                 android:textSize="8pt"
-
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_place_view" />
+                app:layout_constraintTop_toBottomOf="@+id/clear_btn" />
 
             <Button
                 android:id="@+id/clear_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="200dp"
 
+                android:layout_marginTop="52dp"
                 android:background="@drawable/clear_btn"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="@string/clear_btn"
-                android:textColor="@color/white"
 
+                android:textColor="@color/white"
                 android:textSize="8pt"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/done_btn"
-                app:layout_constraintTop_toBottomOf="@+id/history_btn" />
+                app:layout_constraintTop_toBottomOf="@+id/movie_place_view" />
 
             <Button
                 android:id="@+id/history_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="150dp"
 
                 android:background="@drawable/btn_rounded"
                 android:fontFamily="sans-serif-condensed-medium"
