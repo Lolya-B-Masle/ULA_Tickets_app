@@ -2,8 +2,7 @@
     <string name="app_version">V1.07</string>
 
     <string name="title">Создание билета</string>
-    <string name="history_page_title_1_day">Сегодня</string>
-    <string name="history_page_title_2_weeks">Все</string>
+    <string name="history_page_title">История</string>
 
 
     <string name="movie_name_label">Название фильма</string>
@@ -20,7 +19,6 @@
 
     <string name="show_2_weeks">🔍 Все</string>
     <string name="show_1_day">🔍 1 день</string>
-
 
 
     <string name="back_btn">✖️️️</string>

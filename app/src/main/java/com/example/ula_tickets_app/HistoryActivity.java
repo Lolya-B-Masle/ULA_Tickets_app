@@ -1,21 +1,35 @@
 package com.example.ula_tickets_app;
 
+import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+
 public class HistoryActivity extends AppCompatActivity {
 
-    Button exit_btn, clear_btn, search_btn;
+    Button exit_btn, clear_btn;
+    DatabaseHelper databaseHelper;
+    SQLiteDatabase db;
+    TextView status;
 
-    LinearLayout item_list;
+    ListView item_list;
 
     @Override
     protected void onCreate(@NonNull Bundle savedInstanceState) {
@@ -27,13 +41,71 @@ public class HistoryActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        databaseHelper = new DatabaseHelper(getApplicationContext());
 
         exit_btn = findViewById(R.id.exit_btn);
         clear_btn = findViewById(R.id.clear_btn);
-        search_btn = findViewById(R.id.search_btn);
-        //item_list = findViewById(R.id.item_list);
+        item_list = findViewById(R.id.ticketsList);
+        status = findViewById(R.id.status);
 
         exit_btn.setOnClickListener(v ->  finish());
+        clear_btn.setOnClickListener(v -> showClearConfirmationDialog());
 
+        db = databaseHelper.getReadableDatabase();
+
+        loadData();
+    }
+
+    private void showClearConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Подтверждение удаления")
+                .setMessage("Вы действительно хотите удалить все записи? Это действие нельзя отменить.")
+                .setPositiveButton("Удалить", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Действие при подтверждении
+                        databaseHelper.clearTable();
+                        status.setText("Нет билетов...");
+                        Toast.makeText(getApplicationContext(), "Все записи удалены", Toast.LENGTH_SHORT).show();
+                        loadData();
+                    }
+                })
+                .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Действие при отмене
+                        dialog.dismiss();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    int ticketsAmount = 0;
+    int ticketCost = 120;
+
+    private void loadData() {
+        Cursor cursor = databaseHelper.getAllTickets();
+        ArrayList<String> TicketsList = new ArrayList<>();
+
+        if (cursor.getCount() == 0) {
+            TicketsList.add("Записей нет");
+        } else {
+            while (cursor.moveToNext()) {
+                String movie_name = cursor.getString(1);
+                String date = cursor.getString(2);
+                String row = cursor.getString(3);
+                String place = cursor.getString(4);
+                String hall = cursor.getString(5);
+                TicketsList.add(movie_name + ": " + date + "  |  " + "Р: " + row + "  M: " + place + "  З: " + hall);
+                ticketsAmount++;
+            }
+            status.setText("Всего билетов: " + ticketsAmount + " на сумму " + ticketCost*ticketsAmount + " руб.");
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                TicketsList
+        );
+        item_list.setAdapter(adapter);
     }
 }

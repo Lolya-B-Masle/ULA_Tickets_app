@@ -11,10 +11,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.io.IOException;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -31,7 +33,11 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     SQLiteDatabase db;
     Cursor userCursor;
-    SimpleCursorAdapter userAdapter;
     private FrameLayout progressBar;
     private final String cssQuery = "div.col-sm-6.col-md-4.col-lg-3.movies-item", query = "h6.h6.mb-2";
     private final String sourceURL = "https://perviymall.ru/radugarub/kino/";
@@ -60,7 +65,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+        databaseHelper = new DatabaseHelper(getApplicationContext());
 
         company_logo = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
         cinema_logo = BitmapFactory.decodeResource(getResources(), R.drawable.rainbow_logo);
@@ -147,13 +158,28 @@ public class MainActivity extends AppCompatActivity {
                     movie_time.getText().toString().isEmpty() || hall_row.getText().toString().isEmpty() || hall_places.getText().toString().isEmpty()) {
                 Toast.makeText(this, "Для создания билета необходимо заполнить все поля", Toast.LENGTH_SHORT).show();
             } else {
+
+                v.setEnabled(false);
+
                 createTicket();
 
-                //createDB(db);
-                //addTicketToHistory(db, movie_name.toString(), ticket_text.toString(), hall_row.toString(), hall_places.toString(), movie_hall.toString(), 120);
+                Date now = new Date();
+                SimpleDateFormat ticket_date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+
+                boolean isInserted = databaseHelper.addTicket(movie_name.getSelectedItem().toString(), ticket_date.format(now), hall_row.getText().toString(),
+                        hall_places.getText().toString(), movie_hall.getText().toString(), 120);
 
                 String message = "Билет сохранён в папке «БИЛЕТЫ_В_КИНО» вашей галереи";
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        v.setEnabled(true);
+                    }
+                }, 5000);
+                //Toast.makeText(this, "Билет в базу", Toast.LENGTH_LONG).show();
+
             }
         });
     }
@@ -177,11 +203,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // --------------------------------------------- DB --------------------------------
-
-    public void addTicketToHistory(SQLiteDatabase db, String movie_name, String ticket_date,
-                                   String hall_row, String hall_place, String hall_number, int ticket_cost) {
-        db.execSQL("INSERT OR IGNORE INTO tickets VALUES (movie_name, ticket_date, hall_row, hall_place, hall_number, ticket_cost);");
-    }
 
 
     // --------------------------------------------- Date picker -----------------------
@@ -273,4 +294,6 @@ public class MainActivity extends AppCompatActivity {
                 movie_date.getText().toString(), movie_time.getText().toString(),
                 hall_row.getText().toString(), hall_places.getText().toString(), movie_hall.getText().toString());
     }
+
 }
+

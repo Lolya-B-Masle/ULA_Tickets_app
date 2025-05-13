@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
 
             android:fontFamily="sans-serif-condensed-medium"
-            android:text="@string/history_page_title_1_day"
+            android:text="@string/history_page_title"
             android:textAlignment="center"
             android:textColor="@color/black"
 
@@ -48,14 +48,13 @@
 
     </LinearLayout>
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <ListView
+        android:id="@+id/ticketsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
         android:layout_marginTop="60dp"
         android:layout_marginBottom="110dp"
-        android:contentDescription="scrollView_desc"
 
         android:paddingTop="25dp"
 
@@ -64,15 +63,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header_title">
-
-        <LinearLayout
-            android:id="@+id/item_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-        </LinearLayout>
-    </ScrollView>
+    </ListView>
 
     <LinearLayout
         android:id="@+id/option_btn_container"
@@ -102,46 +93,16 @@
 
             android:textSize="8pt" />
 
-        <Button
-            android:id="@+id/search_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-
-            android:layout_marginHorizontal="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/btn_rounded"
-            android:fontFamily="sans-serif-condensed-medium"
-            android:maxWidth="100dp"
-
-            android:text="@string/show_2_weeks"
-
-            android:textColor="@color/white"
-
-            android:textSize="8pt" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/page_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:text="@string/scrollView_desc"
-        android:textColor="@color/l2_gray"
-
-        android:textSize="10pt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:textAlignment="center"
         android:textSize="8pt"
-        android:text="Итого 102 билета на сумму 15000 руб."
+        android:text="Нет билетов..."
         app:layout_constraintBottom_toTopOf="@+id/option_btn_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
