@@ -5,26 +5,24 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.io.IOException;
-import java.text.Format;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -47,14 +45,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class MainActivity extends AppCompatActivity {
-    TextView movie_hall, movie_date, movie_time, hall_row, hall_places;
-    Spinner movie_name;
+    TextView movie_hall, hall_row, hall_places;
+    Spinner movie_name, movie_date, movie_time;
     Button done_btn, clear_btn, history_btn;
     ImageView settings_btn;
     Bitmap company_logo, cinema_logo, divider, BG, ticket_text;
     DatabaseHelper databaseHelper;
-    SQLiteDatabase db;
-    Cursor userCursor;
     private FrameLayout progressBar;
     private final String cssQuery = "div.col-sm-6.col-md-4.col-lg-3.movies-item", query = "h6.h6.mb-2";
     private final String sourceURL = "https://perviymall.ru/radugarub/kino/";
@@ -70,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
         databaseHelper = new DatabaseHelper(getApplicationContext());
 
@@ -82,67 +79,58 @@ public class MainActivity extends AppCompatActivity {
         done_btn = findViewById(R.id.done_btn);
         clear_btn = findViewById(R.id.clear_btn);
         history_btn = findViewById(R.id.history_btn);
+
         movie_name = findViewById(R.id.movie_name_field);
+        movie_date = findViewById(R.id.movie_date_field);
+        movie_time = findViewById(R.id.movie_time_field);
+
         settings_btn = findViewById(R.id.settings_btn);
         progressBar = findViewById(R.id.progressBar);
 
-        List<String> movieList = new ArrayList<>();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, movieList);
+        //List<String> movieList = new ArrayList<>();
+        //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, movieList);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        movie_name.setAdapter(adapter);
+
 
         progressBar.setVisibility(View.VISIBLE);
-        new Thread(() ->{
+        loadDateList();
 
-            try {
-                Document doc = Jsoup.connect(sourceURL)
-                        .userAgent(userAgent)
-                        .referrer(referrer)
-                        .get();
-
-                Elements listNews = doc.select(cssQuery);
-
-                for (Element element : listNews.select(query))
-                    movieList.add(element.text());
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
+        movie_date.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                formatDateForParser(movie_date.getSelectedItem().toString());
+                progressBar.setVisibility(view.VISIBLE);
+                loadFilmsOnDate(movie_date.getSelectedItem().toString());
             }
 
-            runOnUiThread(()->{
-                adapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
-            });
-        }).start();
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        movie_name.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                progressBar.setVisibility(view.VISIBLE);
+                loadMovieSession(movie_name.getSelectedItem().toString(), movie_date.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         TextView[] fields = {
             movie_hall = findViewById(R.id.movie_hall_field),
-            movie_date = findViewById(R.id.movie_date_field),
-            movie_time = findViewById(R.id.movie_time_field),
             hall_row = findViewById(R.id.movie_row_field),
             hall_places = findViewById(R.id.movie_place_field)
         };
 
-        movie_date.setOnClickListener(v -> {
-            showDatePickerDialog();
-        });
-
-        movie_time.setOnClickListener(v -> {
-            showTimePickerDialog();
-        });
-
         clear_btn.setOnClickListener(v -> {
             try {
-                for(int i = 0; i <= fields.length; i++){
+                for(int i = 0; i <= fields.length; i++)
                     fields[i].setText(null);
-                    movie_date.setText(R.string.dateTime_val_hint);
-                    movie_time.setText(R.string.dateTime_val_hint);
-
-                    movie_date.setTextSize(18);
-                    movie_time.setTextSize(18);
-                }
             } catch (Exception e) {
                 Log.d(e.toString(), "clear error");
             }
@@ -154,14 +142,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         done_btn.setOnClickListener(v -> {
-            if (movie_hall.getText().toString().isEmpty() || movie_date.getText().toString().isEmpty() ||
-                    movie_time.getText().toString().isEmpty() || hall_row.getText().toString().isEmpty() || hall_places.getText().toString().isEmpty()) {
+            if (movie_hall.getText().toString().isEmpty() || hall_row.getText().toString().isEmpty() || hall_places.getText().toString().isEmpty()) {
                 Toast.makeText(this, "Для создания билета необходимо заполнить все поля", Toast.LENGTH_SHORT).show();
             } else {
 
                 v.setEnabled(false);
 
-                createTicket();
+                createTicket(movie_date.getSelectedItem().toString());
 
                 Date now = new Date();
                 SimpleDateFormat ticket_date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
@@ -178,94 +165,149 @@ public class MainActivity extends AppCompatActivity {
                         v.setEnabled(true);
                     }
                 }, 5000);
-                //Toast.makeText(this, "Билет в базу", Toast.LENGTH_LONG).show();
-
             }
         });
     }
 
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("SELECTED_DATE", movie_date.getText().toString());
-        outState.putString("SELECTED_TIME", movie_time.getText().toString());
+
+    public void loadDateList() {
+        List<String> dateList = new ArrayList<>();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, dateList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        movie_date.setAdapter(adapter);
+
+        new Thread(() ->{
+            try {
+                Document doc = Jsoup.connect(sourceURL)
+                        .userAgent(userAgent)
+                        .referrer(referrer)
+                        .get();
+
+                Elements listNews = doc.select("div.cinema-calendar");
+
+                for (Element element : listNews.select("div.fs-14.cinema-day__date.fw-500"))
+                    dateList.add(element.text());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                progressBar.setVisibility(View.GONE);
+            }
+
+            runOnUiThread(()->{
+                adapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
+            });
+        }).start();
+    }
+    public void loadFilmsOnDate(String date) {
+        String[] parseDate = formatDateForParser(date);
+
+        String day = parseDate[0];
+        String month = parseDate[1];
+        String url = "https://perviymall.ru/radugarub/kino/?date=2025-"+month+"-"+day+"";
+
+        List<String> movieList = new ArrayList<>();
+        ArrayAdapter<String> movieAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, movieList);
+        movieAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        movie_name.setAdapter(movieAdapter);
+
+        new Thread(() -> {
+            try {
+                Document doc = Jsoup.connect(url)
+                        .userAgent(userAgent)
+                        .referrer(referrer)
+                        .get();
+
+                Elements movieElements = doc.select("div.col-sm-6.col-md-4.col-lg-3.movies-item");
+
+                for (Element movieElement : movieElements)
+                    movieList.add(movieElement.select("h6.h6.mb-2").text());
+
+            } catch (Exception e) {
+                Log.d("ERROR", e.toString());
+            }
+
+            runOnUiThread(()->{
+                movieAdapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
+            });
+
+
+        }).start();
+
     }
 
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        String savedDate = savedInstanceState.getString("SELECTED_DATE");
-        String savedTime = savedInstanceState.getString("SELECTED_TIME");
-        if (savedDate != null) {
-            movie_date.setText(savedDate);
-            movie_time.setText(savedTime);
-        }
+    public void loadMovieSession(String movieName, String date) {
+        String[] parseDate = formatDateForParser(date);
+
+        String day = parseDate[0];
+        String month = parseDate[1];
+        String url = "https://perviymall.ru/radugarub/kino/?date=2025-"+month+"-"+day+"";
+
+        List<String> movieTimesList = new ArrayList<>();
+        ArrayAdapter<String> movieTimesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, movieTimesList);
+        movieTimesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        movie_time.setAdapter(movieTimesAdapter);
+
+        new Thread(() -> {
+            try {
+                Document doc = Jsoup.connect(url)
+                        .userAgent(userAgent)
+                        .referrer(referrer)
+                        .get();
+
+                Elements movieElements = doc.select("div.col-sm-6.col-md-4.col-lg-3.movies-item");
+
+                for (Element movieElement : movieElements.select("h6.h6.mb-2"))
+                    if (movieElement.text().equals(movieName))
+                            for (Element time : movieElements.select(".session.fs-14"))
+                                movieTimesList.add(time.select(".session__time").text());
+
+            } catch (Exception e) {
+                Log.d("ERROR", e.toString());
+            }
+
+            runOnUiThread(()->{
+                movieTimesAdapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.GONE);
+            });
+        }).start();
     }
 
-    // --------------------------------------------- DB --------------------------------
+    public String[] formatDateForParser(String date) {
+        String[] dateStr = date.trim().split(" ");
+        Log.d("Элементы строки даты", dateStr[0] + " - " + dateStr[1]);
 
+        String monthName = dateStr[1];
+        String day = dateStr[0];
 
-    // --------------------------------------------- Date picker -----------------------
+        if (monthName.equals("января") || monthName.equals("янв"))
+            return new String[] {day, "01"};
+        else if (monthName.equals("февраля") || monthName.equals("фев"))
+            return new String[] {day, "02"};
+        else if (monthName.equals("марта") || monthName.equals("мат"))
+            return new String[] {day, "03"};
+        else if (monthName.equals("апреля") || monthName.equals("апр"))
+            return new String[] {day, "04"};
+        else if (monthName.equals("мая"))
+            return new String[] {day, "05"};
+        else if (monthName.equals("июня"))
+            return new String[] {day, "06"};
+        else if (monthName.equals("июля"))
+            return new String[] {day, "07"};
+        else if (monthName.equals("августа") || monthName.equals("авг"))
+            return new String[] {day, "08"};
+        else if (monthName.equals("сентября") || monthName.equals("сен"))
+            return new String[] {day, "09"};
+        else if (monthName.equals("октября") || monthName.equals("окт"))
+            return new String[] {day, "10"};
+        else if (monthName.equals("ноября") || monthName.equals("ноя"))
+            return new String[] {day, "11"};
+        else if (monthName.equals("декабря") || monthName.equals("дек"))
+            return new String[] {day, "12"};
 
-    private final Calendar selectedDate = Calendar.getInstance();
-
-    private void showDatePickerDialog() {
-        int year = selectedDate.get(Calendar.YEAR);
-        int month = selectedDate.get(Calendar.MONTH);
-        int day = selectedDate.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        selectedDate.set(year, month, dayOfMonth);
-                        updateSelectedDateText();
-                    }
-                },
-                year, month, day
-        );
-
-        datePickerDialog.show();
-    }
-
-    private void updateSelectedDateText() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM", Locale.getDefault());
-        String formattedDate = dateFormat.format(selectedDate.getTime());
-        movie_date.setText(formattedDate);
-        movie_date.setTextSize(24);
-    }
-
-// --------------------------------------------- Time picker -----------------------
-
-    private final Calendar selectedTime = Calendar.getInstance();
-
-    private void showTimePickerDialog() {
-        int hour = selectedTime.get(Calendar.HOUR_OF_DAY);
-        int minute = selectedTime.get(Calendar.MINUTE);
-
-        TimePickerDialog timePickerDialog = new TimePickerDialog(
-                this,
-                new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        selectedTime.set(Calendar.MINUTE, minute);
-                        updateSelectedTimeText();
-                    }
-                },
-                hour, minute, true // true - 24-часовой формат, false - AM/PM
-        );
-
-        timePickerDialog.show();
-    }
-
-    private void updateSelectedTimeText() {
-        String formattedTime = String.format(Locale.getDefault(), "%02d:%02d",
-                selectedTime.get(Calendar.HOUR_OF_DAY),
-                selectedTime.get(Calendar.MINUTE));
-        movie_time.setText(formattedTime);
-        movie_time.setTextSize(24);
+        return null;
     }
 
     // --------------------------------------------- Text splitter -----------------------
@@ -286,12 +328,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // --------------------------------------------- Image creator -----------------------
+    private void createTicket(String date) {
 
-    private void createTicket() {
+        String[] parseDate = formatDateForParser(date);
+
+        String day = parseDate[0];
+        String month = parseDate[1];
+
+        String movie_date = day+"."+month;
+
         TicketCreator ticket = new TicketCreator();
         ticket.generateTicketImage(this, BG, cinema_logo, company_logo, divider, ticket_text,
                 splitStringByLastSpace(movie_name.getSelectedItem().toString(), 20),
-                movie_date.getText().toString(), movie_time.getText().toString(),
+                movie_date, movie_time.getSelectedItem().toString(),
                 hall_row.getText().toString(), hall_places.getText().toString(), movie_hall.getText().toString());
     }
 

@@ -127,7 +127,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="@string/default_hint"
                     android:inputType="text"
                     android:minHeight="48dp"
                     android:textAlignment="textStart" />
@@ -137,12 +136,12 @@
                 android:id="@+id/movie_hall_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_name_view">
+                app:layout_constraintTop_toBottomOf="@+id/movie_place_view">
 
                 <TextView
                     android:id="@+id/movie_hall_label"
@@ -173,12 +172,12 @@
                 android:id="@+id/movie_date_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingVertical="5dp"
                 app:layout_constraintStart_toStartOf="@+id/movie_hall_view"
-                app:layout_constraintTop_toBottomOf="@+id/movie_hall_view">
+                app:layout_constraintTop_toBottomOf="@+id/movie_name_view">
 
                 <TextView
                     android:id="@+id/movie_date_label"
@@ -191,18 +190,14 @@
                     android:textColor="@color/black"
                     android:textSize="8pt" />
 
-                <TextView
+                <Spinner
                     android:id="@+id/movie_date_field"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-
-                    android:gravity="center"
-                    android:paddingVertical="5dp"
-                    android:text="@string/dateTime_val_hint"
-
-
-                    android:textColor="@color/black"
-                    android:textSize="8pt" />
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:minHeight="48dp"
+                    android:textAlignment="textStart" />
             </LinearLayout>
 
             <LinearLayout
@@ -227,25 +222,21 @@
                     android:textColor="@color/gray"
                     android:textSize="8pt" />
 
-                <TextView
+                <Spinner
                     android:id="@+id/movie_time_field"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-
+                    android:layout_height="wrap_content"
                     android:ems="10"
-                    android:gravity="center"
-                    android:paddingVertical="5dp"
-                    android:text="@string/dateTime_val_hint"
-
-                    android:textColor="@color/black"
-                    android:textSize="8pt" />
+                    android:inputType="text"
+                    android:minHeight="48dp"
+                    android:textAlignment="textStart" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/movie_row_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="45dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -279,7 +270,7 @@
                 android:id="@+id/movie_place_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="20dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -333,15 +324,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:layout_marginTop="52dp"
+                android:layout_marginTop="50dp"
                 android:background="@drawable/clear_btn"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:text="@string/clear_btn"
 
+                android:text="@string/clear_btn"
                 android:textColor="@color/white"
                 android:textSize="8pt"
                 app:layout_constraintStart_toStartOf="@+id/done_btn"
-                app:layout_constraintTop_toBottomOf="@+id/movie_place_view" />
+                app:layout_constraintTop_toBottomOf="@+id/movie_hall_view" />
 
             <Button
                 android:id="@+id/history_btn"

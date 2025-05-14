@@ -1,25 +1,23 @@
 package com.example.ula_tickets_app;
 
+import java.util.List;
+
 public class Movie {
-    int ID;
-    String movie_name;
-    String[] sessions;
+    String title;
+    List<String> showTimes;
 
-    public Movie(int ID, String movie_name, String[] sessions) {
-        this.ID = ID;
-        this.movie_name = movie_name;
-        this.sessions = sessions;
-    }
-
-    public int getID() {
-        return ID;
+    public Movie(String movie_name, List<String> showTimes) {
+        this.title = movie_name;
+        this.showTimes = showTimes;
     }
 
     public String getMovieName() {
-        return movie_name;
+        return title;
     }
 
-    public String[] getSessions() {
-        return sessions;
+    public List<String> getShowTimes() {
+        return showTimes;
     }
+
+
 }
