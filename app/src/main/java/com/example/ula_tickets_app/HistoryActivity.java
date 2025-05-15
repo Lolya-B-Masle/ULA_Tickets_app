@@ -21,6 +21,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -60,29 +62,23 @@ public class HistoryActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Подтверждение удаления")
                 .setMessage("Вы действительно хотите удалить все записи? Это действие нельзя отменить.")
-                .setPositiveButton("Удалить", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Действие при подтверждении
-                        databaseHelper.clearTable();
-                        status.setText("Нет билетов...");
-                        Toast.makeText(getApplicationContext(), "Все записи удалены", Toast.LENGTH_SHORT).show();
-                        loadData();
-                    }
+                .setPositiveButton("Удалить", (dialog, which) -> {
+                    databaseHelper.clearTable();
+                    status.setText("Нет билетов...");
+                    Toast.makeText(getApplicationContext(), "Все записи удалены", Toast.LENGTH_SHORT).show();
+                    loadData();
                 })
-                .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Действие при отмене
-                        dialog.dismiss();
-                    }
-                })
+                .setNegativeButton("Отмена", (dialog, which) -> dialog.dismiss())
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
 
-    int ticketsAmount = 0;
-    int ticketCost = 120;
-
     private void loadData() {
+
+        int ticketsAmount = 0;
+        int ticketCost = 120;
+        String splitLine = "-".repeat(75);
+
         Cursor cursor = databaseHelper.getAllTickets();
         ArrayList<String> TicketsList = new ArrayList<>();
 
@@ -95,9 +91,10 @@ public class HistoryActivity extends AppCompatActivity {
                 String row = cursor.getString(3);
                 String place = cursor.getString(4);
                 String hall = cursor.getString(5);
-                TicketsList.add(movie_name + ": " + date + "  |  " + "Р: " + row + "  M: " + place + "  З: " + hall);
+                TicketsList.add(splitLine+'\n'+movie_name+": "+date+"\n"+row+" р, м "+place+", зал "+hall+'\n'+splitLine);
                 ticketsAmount++;
             }
+            Collections.reverse(TicketsList);
             status.setText("Всего билетов: " + ticketsAmount + " на сумму " + ticketCost*ticketsAmount + " руб.");
         }
 

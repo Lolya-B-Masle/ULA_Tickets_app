@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_version">V1.07</string>
+    <string name="app_version">V2.00</string>
 
     <string name="title">Создание билета</string>
     <string name="history_page_title">История</string>
@@ -16,6 +16,7 @@
     <string name="submit_btn">✅ Готово</string>
     <string name="clear_btn">🗑️ Очистить</string>
     <string name="history_btn">📜 История</string>
+    <string name="settings_btn">⚙️ Настройки</string>
 
     <string name="show_2_weeks">🔍 Все</string>
     <string name="show_1_day">🔍 1 день</string>

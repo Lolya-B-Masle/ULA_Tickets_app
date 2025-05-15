@@ -27,7 +27,6 @@ public class TicketCreator {
     private final SimpleDateFormat ticket_date = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
     private final SimpleDateFormat movie_year = new SimpleDateFormat(".yyyy", Locale.getDefault());
     private final Paint paint = new Paint();
-    //private final Random rand = new Random();
 
     public File generateTicketImage(Context context, Bitmap BG, Bitmap R_logo, Bitmap U_logo, Bitmap divider, Bitmap dec_text,
                                     String[] movieTitle, String date, String time,

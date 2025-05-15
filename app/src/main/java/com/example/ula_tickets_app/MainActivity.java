@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -36,8 +37,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -47,8 +50,7 @@ import org.jsoup.select.Elements;
 public class MainActivity extends AppCompatActivity {
     TextView movie_hall, hall_row, hall_places;
     Spinner movie_name, movie_date, movie_time;
-    Button done_btn, clear_btn, history_btn;
-    ImageView settings_btn;
+    Button done_btn, clear_btn, history_btn, settings_btn;
     Bitmap company_logo, cinema_logo, divider, BG, ticket_text;
     DatabaseHelper databaseHelper;
     private FrameLayout progressBar;
@@ -79,53 +81,19 @@ public class MainActivity extends AppCompatActivity {
         done_btn = findViewById(R.id.done_btn);
         clear_btn = findViewById(R.id.clear_btn);
         history_btn = findViewById(R.id.history_btn);
+        settings_btn = findViewById(R.id.settings_btn);
 
         movie_name = findViewById(R.id.movie_name_field);
         movie_date = findViewById(R.id.movie_date_field);
         movie_time = findViewById(R.id.movie_time_field);
 
-        settings_btn = findViewById(R.id.settings_btn);
-        progressBar = findViewById(R.id.progressBar);
-
-        //List<String> movieList = new ArrayList<>();
-        //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, movieList);
-
-
-
-        progressBar.setVisibility(View.VISIBLE);
-        loadDateList();
-
-        movie_date.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                formatDateForParser(movie_date.getSelectedItem().toString());
-                progressBar.setVisibility(view.VISIBLE);
-                loadFilmsOnDate(movie_date.getSelectedItem().toString());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        movie_name.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                progressBar.setVisibility(view.VISIBLE);
-                loadMovieSession(movie_name.getSelectedItem().toString(), movie_date.getSelectedItem().toString());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         TextView[] fields = {
-            movie_hall = findViewById(R.id.movie_hall_field),
-            hall_row = findViewById(R.id.movie_row_field),
-            hall_places = findViewById(R.id.movie_place_field)
+                movie_hall = findViewById(R.id.movie_hall_field),
+                hall_row = findViewById(R.id.movie_row_field),
+                hall_places = findViewById(R.id.movie_place_field)
         };
+
+        progressBar = findViewById(R.id.progressBar);
 
         clear_btn.setOnClickListener(v -> {
             try {
@@ -142,10 +110,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         done_btn.setOnClickListener(v -> {
-            if (movie_hall.getText().toString().isEmpty() || hall_row.getText().toString().isEmpty() || hall_places.getText().toString().isEmpty()) {
+            if (movie_name.getSelectedItem().equals("Нет сеансов на эту дату.") || movie_hall.getText().toString().isEmpty() || hall_row.getText().toString().isEmpty() || hall_places.getText().toString().isEmpty()) {
                 Toast.makeText(this, "Для создания билета необходимо заполнить все поля", Toast.LENGTH_SHORT).show();
             } else {
-
                 v.setEnabled(false);
 
                 createTicket(movie_date.getSelectedItem().toString());
@@ -153,22 +120,54 @@ public class MainActivity extends AppCompatActivity {
                 Date now = new Date();
                 SimpleDateFormat ticket_date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
-                boolean isInserted = databaseHelper.addTicket(movie_name.getSelectedItem().toString(), ticket_date.format(now), hall_row.getText().toString(),
+                databaseHelper.addTicket(movie_name.getSelectedItem().toString(), ticket_date.format(now), hall_row.getText().toString(),
                         hall_places.getText().toString(), movie_hall.getText().toString(), 120);
 
                 String message = "Билет сохранён в папке «БИЛЕТЫ_В_КИНО» вашей галереи";
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        v.setEnabled(true);
-                    }
-                }, 5000);
+                new Handler().postDelayed(() -> v.setEnabled(true), 5000);
             }
         });
-    }
 
+        progressBar.setVisibility(View.VISIBLE);
+        new Thread(() -> {
+            try {
+
+                Thread.sleep(50);
+
+                loadDateList();
+
+                runOnUiThread(()-> progressBar.setVisibility(View.GONE));
+            } catch (Exception e) {
+                runOnUiThread(()-> {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(this, "Не удалось загрузить данные, ", Toast.LENGTH_SHORT).show();
+                });
+            }
+        }).start();
+
+        movie_date.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                formatDateForParser(movie_date.getSelectedItem().toString());
+                progressBar.setVisibility(view.VISIBLE);
+                loadFilmsOnDate(movie_date.getSelectedItem().toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        movie_name.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                progressBar.setVisibility(view.VISIBLE);
+                loadMovieSession(movie_name.getSelectedItem().toString(), movie_date.getSelectedItem().toString());
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
 
     public void loadDateList() {
         List<String> dateList = new ArrayList<>();
@@ -223,6 +222,8 @@ public class MainActivity extends AppCompatActivity {
 
                 for (Element movieElement : movieElements)
                     movieList.add(movieElement.select("h6.h6.mb-2").text());
+                if (movieList.isEmpty())
+                    movieList.add("Нет сеансов на эту дату.");
 
             } catch (Exception e) {
                 Log.d("ERROR", e.toString());
@@ -235,15 +236,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         }).start();
-
     }
-
     public void loadMovieSession(String movieName, String date) {
         String[] parseDate = formatDateForParser(date);
 
         String day = parseDate[0];
         String month = parseDate[1];
         String url = "https://perviymall.ru/radugarub/kino/?date=2025-"+month+"-"+day+"";
+
+        Map<String, String[]> movieSessions = new HashMap<>();
 
         List<String> movieTimesList = new ArrayList<>();
         ArrayAdapter<String> movieTimesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, movieTimesList);
@@ -259,10 +260,20 @@ public class MainActivity extends AppCompatActivity {
 
                 Elements movieElements = doc.select("div.col-sm-6.col-md-4.col-lg-3.movies-item");
 
-                for (Element movieElement : movieElements.select("h6.h6.mb-2"))
-                    if (movieElement.text().equals(movieName))
-                            for (Element time : movieElements.select(".session.fs-14"))
-                                movieTimesList.add(time.select(".session__time").text());
+                for (Element movieElement : movieElements) {
+                    String name = movieElement.select(".h6.mb-2").text();
+                    String session = movieElement.select(".session__time").text();
+
+                    movieSessions.put(name, session.split(" "));
+                }
+
+                for (Map.Entry<String, String[]> time : movieSessions.entrySet()) {
+                    String key = time.getKey();
+                    String[] values = time.getValue();
+
+                    if (key.equals(movieName))
+                        movieTimesList.addAll(Arrays.asList(values));
+                }
 
             } catch (Exception e) {
                 Log.d("ERROR", e.toString());
