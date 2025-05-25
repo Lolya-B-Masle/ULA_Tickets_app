@@ -1,35 +1,34 @@
 package com.example.ula_tickets_app;
 
 import android.Manifest;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.text.SimpleDateFormat;
+
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
@@ -48,13 +47,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class MainActivity extends AppCompatActivity {
-    TextView movie_hall, hall_row, hall_places;
-    Spinner movie_name, movie_date, movie_time;
+    TextView hall_places;
+    Spinner movie_name, movie_date, movie_time, hall_row, movie_hall;
     Button done_btn, clear_btn, history_btn, settings_btn;
     Bitmap company_logo, cinema_logo, divider, BG, ticket_text;
+    LinearLayout hall_view;
     DatabaseHelper databaseHelper;
     private FrameLayout progressBar;
-    private final String cssQuery = "div.col-sm-6.col-md-4.col-lg-3.movies-item", query = "h6.h6.mb-2";
     private final String sourceURL = "https://perviymall.ru/radugarub/kino/";
     private final String userAgent = "Chrome/96.0.4664.93 Safari/537.36", referrer = "https://google.com";
 
@@ -86,19 +85,45 @@ public class MainActivity extends AppCompatActivity {
         movie_name = findViewById(R.id.movie_name_field);
         movie_date = findViewById(R.id.movie_date_field);
         movie_time = findViewById(R.id.movie_time_field);
+        hall_row = findViewById(R.id.movie_row_field);
+        movie_hall = findViewById(R.id.movie_hall_field);
 
-        TextView[] fields = {
-                movie_hall = findViewById(R.id.movie_hall_field),
-                hall_row = findViewById(R.id.movie_row_field),
-                hall_places = findViewById(R.id.movie_place_field)
-        };
+        hall_places = findViewById(R.id.movie_place_field);
 
         progressBar = findViewById(R.id.progressBar);
 
+        hall_view = findViewById(R.id.movie_hall_view);
+
+
+        String isDipVer = CacheHelper.getFromCache(this, "isDip", "false");
+        if (isDipVer.equals("true")) {
+            //movie_hall.setText("уточнять у кассира");
+            hall_view.setVisibility(View.GONE);
+        }
+
+        List<Integer> rowList = new ArrayList<>();
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, rowList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        hall_row.setAdapter(adapter);
+
+        for (int i = 1; i < 9; i++){
+            rowList.add(i);
+            adapter.notifyDataSetChanged();
+        }
+
+        List<Integer> hallList = new ArrayList<>();
+        ArrayAdapter<Integer> adapter_2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, hallList);
+        adapter_2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        movie_hall.setAdapter(adapter_2);
+
+        for (int i = 1; i < 5; i++){
+            hallList.add(i);
+            adapter_2.notifyDataSetChanged();
+        }
+
         clear_btn.setOnClickListener(v -> {
             try {
-                for(int i = 0; i <= fields.length; i++)
-                    fields[i].setText(null);
+                hall_places.setText(null);
             } catch (Exception e) {
                 Log.d(e.toString(), "clear error");
             }
@@ -109,8 +134,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        settings_btn.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, activity_settings.class);
+            startActivity(intent);
+        });
+
         done_btn.setOnClickListener(v -> {
-            if (movie_name.getSelectedItem().equals("Нет сеансов на эту дату.") || movie_hall.getText().toString().isEmpty() || hall_row.getText().toString().isEmpty() || hall_places.getText().toString().isEmpty()) {
+            if (movie_name.getSelectedItem().equals("Нет сеансов на эту дату.") || movie_hall.getSelectedItem().toString().isEmpty() || hall_row.getSelectedItem().toString().isEmpty() || hall_places.getText().toString().isEmpty()) {
                 Toast.makeText(this, "Для создания билета необходимо заполнить все поля", Toast.LENGTH_SHORT).show();
             } else {
                 v.setEnabled(false);
@@ -120,11 +150,33 @@ public class MainActivity extends AppCompatActivity {
                 Date now = new Date();
                 SimpleDateFormat ticket_date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
-                databaseHelper.addTicket(movie_name.getSelectedItem().toString(), ticket_date.format(now), hall_row.getText().toString(),
-                        hall_places.getText().toString(), movie_hall.getText().toString(), 120);
+                String ticketCost_str = CacheHelper.getFromCache(this, "cost", "120");
+                int ticketCost = Integer.parseInt(ticketCost_str);
+
+                databaseHelper.addTicket(movie_name.getSelectedItem().toString(), ticket_date.format(now), hall_row.getSelectedItem().toString(),
+                        hall_places.getText().toString(), movie_hall.getSelectedItem().toString(), ticketCost);
 
                 String message = "Билет сохранён в папке «БИЛЕТЫ_В_КИНО» вашей галереи";
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+                String WA = CacheHelper.getFromCache(this, "WA", "false");
+                if (WA.equals("true")){
+                    String name = "*"+movie_name.getSelectedItem().toString()+"*";
+                    String date = "*"+movie_date.getSelectedItem().toString()+"*";
+                    String time = "*"+movie_time.getSelectedItem().toString()+"*";
+                    String row = "*"+hall_row.getSelectedItem().toString()+"*";
+                    String place = "*"+hall_places.getText().toString()+"*";
+                    String hall = "*"+movie_hall.getSelectedItem().toString()+"*";
+                    String WA_message = "Фильм: "+name+'\n'+
+                            "Дата: "+date+'\n'+
+                            "Время: "+time+'\n'+
+                            "Ряд: "+row+'\n'+
+                            "Место: "+place+'\n'+
+                            "Зал: "+hall;
+
+                    openWhatsApp(WA_message);
+
+                }
 
                 new Handler().postDelayed(() -> v.setEnabled(true), 5000);
             }
@@ -253,10 +305,7 @@ public class MainActivity extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                Document doc = Jsoup.connect(url)
-                        .userAgent(userAgent)
-                        .referrer(referrer)
-                        .get();
+                Document doc = Jsoup.connect(url).userAgent(userAgent).referrer(referrer).get();
 
                 Elements movieElements = doc.select("div.col-sm-6.col-md-4.col-lg-3.movies-item");
 
@@ -297,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
             return new String[] {day, "01"};
         else if (monthName.equals("февраля") || monthName.equals("фев"))
             return new String[] {day, "02"};
-        else if (monthName.equals("марта") || monthName.equals("мат"))
+        else if (monthName.equals("марта") || monthName.equals("мар"))
             return new String[] {day, "03"};
         else if (monthName.equals("апреля") || monthName.equals("апр"))
             return new String[] {day, "04"};
@@ -319,6 +368,20 @@ public class MainActivity extends AppCompatActivity {
             return new String[] {day, "12"};
 
         return null;
+    }
+
+    // --------------------------------------------- WhatsApp open -----------------------
+
+    public void openWhatsApp(String message) {
+        try {
+            String url = "https://api.whatsapp.com/send?text=" +
+                    URLEncoder.encode(message, "UTF-8");
+
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(browserIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // --------------------------------------------- Text splitter -----------------------
@@ -352,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
         ticket.generateTicketImage(this, BG, cinema_logo, company_logo, divider, ticket_text,
                 splitStringByLastSpace(movie_name.getSelectedItem().toString(), 20),
                 movie_date, movie_time.getSelectedItem().toString(),
-                hall_row.getText().toString(), hall_places.getText().toString(), movie_hall.getText().toString());
+                hall_row.getSelectedItem().toString(), hall_places.getText().toString(), movie_hall.getSelectedItem().toString());
     }
 
 }

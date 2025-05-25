@@ -53,6 +53,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
+    public boolean checkCollision(String d, String r, String p, String h) {
+        Cursor cursor = getAllTickets();
+
+        while (cursor.moveToNext()) {
+            String date = cursor.getString(2);
+            String row = cursor.getString(3);
+            String place = cursor.getString(4);
+            String hall = cursor.getString(5);
+
+            if (date.equals(d) & row.equals(r) & place.equals(p) & hall.equals(h))
+                return false;
+
+        }
+
+        return true;
+    }
+
     public Cursor getAllTickets() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE, null);

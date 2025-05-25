@@ -5,11 +5,11 @@
     <string name="history_page_title">История</string>
 
 
-    <string name="movie_name_label">Название фильма</string>
-    <string name="movie_hall_label">Зал</string>
+    <string name="movie_name_label">Фильм:</string>
+    <string name="movie_hall_label">Зал: </string>
     <string name="movie_date_label">Дата:</string>
-    <string name="movie_time_label">Время:</string>
-    <string name="movie_row_label">Ряд</string>
+    <string name="movie_time_label">Сеанс:</string>
+    <string name="movie_row_label">Ряд:</string>
     <string name="movie_place_label">Место / места</string>
     <string name="person_label">Фамилия</string>
 
@@ -20,6 +20,13 @@
 
     <string name="show_2_weeks">🔍 Все</string>
     <string name="show_1_day">🔍 1 день</string>
+
+    <string name="settings_label_text">Настройки</string>
+    <string name="settings_phone_text">Номер телефона</string>
+    <string name="settings_ticket_text">Стоимость билета</string>
+    <string name="settings_hall_number_text">Не указывать номер зала</string>
+    <string name="settings_WA_open_text">Открывать WhatsApp после создания билета</string>
+    <string name="settings_btn_text">💾 Сохранить</string>
 
 
     <string name="back_btn">✖️️️</string>

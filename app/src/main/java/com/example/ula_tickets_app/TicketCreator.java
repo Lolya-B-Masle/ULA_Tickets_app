@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -20,7 +19,6 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Random;
 
 public class TicketCreator {
     private final Date now = new Date();
@@ -90,10 +88,14 @@ public class TicketCreator {
 
         paint.setTextSize(80);
         paint.setFakeBoldText(true);
-        canvas.drawText(movie_name[0].toUpperCase().trim(), 60, 660, paint);
 
-        if (movie_name.length == 2)
+        if (movie_name.length == 2) {
+            if (movie_name[1].length() > 18)
+                paint.setTextSize(65);
             canvas.drawText(movie_name[1].toUpperCase().trim(), 60, 760, paint);
+        }
+
+        canvas.drawText(movie_name[0].toUpperCase().trim(), 60, 660, paint);
 
         paint.setFakeBoldText(false);
     }
@@ -129,7 +131,12 @@ public class TicketCreator {
 
         paint.setTextSize(85);
         paint.setFakeBoldText(true);
+
+        if (hall_value.equals("уточнять у кассира"))
+            paint.setTextSize(65);
         canvas.drawText(hall_value.trim(), 260, 1230, paint);
+
+        paint.setTextSize(85);
         canvas.drawText(row_value.trim(), 260, 1350, paint);
         canvas.drawText(place_value.trim(), 260, 1470, paint);
         paint.setFakeBoldText(false);

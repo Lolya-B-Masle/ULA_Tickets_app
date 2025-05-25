@@ -1,14 +1,11 @@
 package com.example.ula_tickets_app;
 
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +19,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -30,7 +26,6 @@ public class HistoryActivity extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     SQLiteDatabase db;
     TextView status;
-
     ListView item_list;
 
     @Override
@@ -74,9 +69,8 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-
+        int cost = 0;
         int ticketsAmount = 0;
-        int ticketCost = 120;
         String splitLine = "-".repeat(75);
 
         Cursor cursor = databaseHelper.getAllTickets();
@@ -91,11 +85,13 @@ public class HistoryActivity extends AppCompatActivity {
                 String row = cursor.getString(3);
                 String place = cursor.getString(4);
                 String hall = cursor.getString(5);
-                TicketsList.add(splitLine+'\n'+movie_name+": "+date+"\n"+row+" р, м "+place+", зал "+hall+'\n'+splitLine);
+                String ticketCost = cursor.getString(6);
+                TicketsList.add(splitLine+" "+ticketCost+"₽\n"+movie_name+": "+date+"\n"+row+" р, м "+place+", зал "+hall+'\n'+splitLine);
                 ticketsAmount++;
+                cost+=Integer.parseInt(ticketCost);
             }
             Collections.reverse(TicketsList);
-            status.setText("Всего билетов: " + ticketsAmount + " на сумму " + ticketCost*ticketsAmount + " руб.");
+            status.setText("Всего билетов: " + ticketsAmount + " на сумму " + cost + " руб.");
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
