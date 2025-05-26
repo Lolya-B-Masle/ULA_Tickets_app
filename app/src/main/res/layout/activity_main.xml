@@ -156,6 +156,43 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/client_phone_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:paddingVertical="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/movie_hall_view"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/client_phone_label"
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="@string/client_label"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/gray"
+                    android:textSize="8pt" />
+
+                <EditText
+                    android:id="@+id/client_phone_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/default_hint"
+                    android:inputType="phone|number"
+                    android:minHeight="48dp"
+                    android:textAlignment="center"
+                    android:maxLength="11"
+                    android:textSize="10pt" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/movie_date_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -223,7 +260,7 @@
                 android:id="@+id/movie_row_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal"
                 android:paddingVertical="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -318,7 +355,7 @@
                 android:textColor="@color/white"
                 android:textSize="8pt"
                 app:layout_constraintStart_toStartOf="@+id/done_btn"
-                app:layout_constraintTop_toBottomOf="@+id/movie_hall_view" />
+                app:layout_constraintTop_toBottomOf="@+id/client_phone_view" />
 
             <Button
                 android:id="@+id/history_btn"

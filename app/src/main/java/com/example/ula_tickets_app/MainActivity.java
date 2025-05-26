@@ -1,7 +1,6 @@
 package com.example.ula_tickets_app;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,14 +16,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +44,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class MainActivity extends AppCompatActivity {
-    TextView hall_places;
+    TextView hall_places, phone_number;
     Spinner movie_name, movie_date, movie_time, hall_row, movie_hall;
     Button done_btn, clear_btn, history_btn, settings_btn;
     Bitmap company_logo, cinema_logo, divider, BG, ticket_text;
@@ -89,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         movie_hall = findViewById(R.id.movie_hall_field);
 
         hall_places = findViewById(R.id.movie_place_field);
+        phone_number = findViewById(R.id.client_phone_field);
 
         progressBar = findViewById(R.id.progressBar);
 
@@ -140,7 +138,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         done_btn.setOnClickListener(v -> {
-            if (movie_name.getSelectedItem().equals("Нет сеансов на эту дату.") || movie_hall.getSelectedItem().toString().isEmpty() || hall_row.getSelectedItem().toString().isEmpty() || hall_places.getText().toString().isEmpty()) {
+            if (movie_name.getSelectedItem().equals("Нет сеансов на эту дату.") || movie_hall.getSelectedItem().toString().isEmpty()
+                    || hall_row.getSelectedItem().toString().isEmpty() || hall_places.getText().toString().isEmpty() || phone_number.getText().toString().isEmpty()
+                    || phone_number.getText().toString().length() < 11
+            ) {
                 Toast.makeText(this, "Для создания билета необходимо заполнить все поля", Toast.LENGTH_SHORT).show();
             } else {
                 v.setEnabled(false);
@@ -384,7 +385,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // --------------------------------------------- Text splitter -----------------------
+    // --------------------------------------------- Text helper -----------------------
+
+    public static String formatPhoneNumber(String number) {
+        if (number == null || number.length() != 11 || !number.matches("\\d+")) {
+            throw new IllegalArgumentException("Некорректный номер телефона");
+        }
+        return String.format(
+                "%s-%s-%s-%s-%s",
+                number.substring(0, 1),
+                number.substring(1, 4),
+                number.substring(4, 7),
+                number.substring(7, 9),
+                number.substring(9)
+        );
+    }
 
     public static String[] splitStringByLastSpace(String input, int maxLength) {
         if (input == null || input.length() <= maxLength)
@@ -415,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
         ticket.generateTicketImage(this, BG, cinema_logo, company_logo, divider, ticket_text,
                 splitStringByLastSpace(movie_name.getSelectedItem().toString(), 20),
                 movie_date, movie_time.getSelectedItem().toString(),
-                hall_row.getSelectedItem().toString(), hall_places.getText().toString(), movie_hall.getSelectedItem().toString());
+                hall_row.getSelectedItem().toString(), hall_places.getText().toString(), movie_hall.getSelectedItem().toString(), formatPhoneNumber(phone_number.getText().toString()));
     }
 
 }

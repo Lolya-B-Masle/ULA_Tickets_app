@@ -28,8 +28,8 @@ public class TicketCreator {
 
     public File generateTicketImage(Context context, Bitmap BG, Bitmap R_logo, Bitmap U_logo, Bitmap divider, Bitmap dec_text,
                                     String[] movieTitle, String date, String time,
-                                    String row, String seat, String hall) {
-        Bitmap bitmap = createTicketBitmap(BG, R_logo, U_logo, divider, dec_text, movieTitle, date, time, row, seat, hall);
+                                    String row, String seat, String hall, String phone) {
+        Bitmap bitmap = createTicketBitmap(BG, R_logo, U_logo, divider, dec_text, movieTitle, date, time, row, seat, hall, phone);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
             return saveForAndroid10Plus(context, bitmap, date, time);
@@ -39,7 +39,7 @@ public class TicketCreator {
 
     private Bitmap createTicketBitmap(Bitmap BG, Bitmap R_logo, Bitmap U_logo, Bitmap divider, Bitmap dec_text,
                                              String[] movieTitle, String date, String time,
-                                             String row, String seat, String hall) {
+                                             String row, String seat, String hall, String phone) {
         int width = 1080;
         int height = 1920;
         Bitmap bitmap = Bitmap.createScaledBitmap(BG, width, height, false);
@@ -48,6 +48,8 @@ public class TicketCreator {
         setCinemaLogo(R_logo, canvas);
         setCompanyLogo(U_logo, canvas);
         setDivider(divider, canvas);
+
+        setClientPhoneNumber(phone, canvas);
 
         setBitmap(dec_text, 704, 445, 60, 1470, canvas);
 
@@ -78,6 +80,13 @@ public class TicketCreator {
     protected void setBitmap(Bitmap bmp, int width, int height, int x, int y, Canvas canvas) {
         Bitmap bmp_scaled = Bitmap.createScaledBitmap(bmp, width, height, false);
         canvas.drawBitmap(bmp_scaled, x, y, paint);
+    }
+
+    protected void setClientPhoneNumber(String phone, Canvas canvas) {
+        paint.setColor(Color.DKGRAY);
+        paint.setTextSize(50);
+
+        canvas.drawText(phone, 350, 425, paint);
     }
 
     protected void setMovieName(String[] movie_name, Canvas canvas) {

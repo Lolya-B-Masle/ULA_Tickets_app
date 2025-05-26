@@ -160,6 +160,27 @@
             tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/phoneNumber_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="5dp"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/WA_open_feild_container">
+
+        <CheckBox
+            android:id="@+id/phoneNumber_checkbox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/settings_phone_number_text"
+            tools:ignore="TouchTargetSizeCheck" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/save_btn"
         android:layout_width="wrap_content"

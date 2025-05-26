@@ -1,7 +1,7 @@
 <resources>
     <string name="app_version">V2.00</string>
 
-    <string name="title">Создание билета</string>
+    <string name="title">Создание купона</string>
     <string name="history_page_title">История</string>
 
 
@@ -11,7 +11,7 @@
     <string name="movie_time_label">Сеанс:</string>
     <string name="movie_row_label">Ряд:</string>
     <string name="movie_place_label">Место / места</string>
-    <string name="person_label">Фамилия</string>
+    <string name="client_label">Тел.</string>
 
     <string name="submit_btn">✅ Готово</string>
     <string name="clear_btn">🗑️ Очистить</string>
@@ -26,6 +26,7 @@
     <string name="settings_ticket_text">Стоимость билета</string>
     <string name="settings_hall_number_text">Не указывать номер зала</string>
     <string name="settings_WA_open_text">Открывать WhatsApp после создания билета</string>
+    <string name="settings_phone_number_text">Показывать номер телефона</string>
     <string name="settings_btn_text">💾 Сохранить</string>
 
 

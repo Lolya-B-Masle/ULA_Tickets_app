@@ -91,7 +91,7 @@ public class HistoryActivity extends AppCompatActivity {
                 cost+=Integer.parseInt(ticketCost);
             }
             Collections.reverse(TicketsList);
-            status.setText("Всего билетов: " + ticketsAmount + " на сумму " + cost + " руб.");
+            status.setText("Всего купонов: " + ticketsAmount + " на сумму " + cost + " руб.");
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
