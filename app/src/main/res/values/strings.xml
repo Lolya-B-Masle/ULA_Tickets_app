@@ -15,6 +15,7 @@
 
     <string name="submit_btn">✅ Готово</string>
     <string name="clear_btn">🗑️ Очистить</string>
+    <string name="report_btn">📑 Отчет</string>
     <string name="history_btn">📜 История</string>
     <string name="settings_btn">⚙️ Настройки</string>
 

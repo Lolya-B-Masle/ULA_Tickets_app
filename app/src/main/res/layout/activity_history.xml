@@ -50,20 +50,16 @@
 
     <ListView
         android:id="@+id/ticketsList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="110dp"
-
-        android:paddingTop="25dp"
-
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/header_title"
+        app:layout_constraintBottom_toTopOf="@id/status"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header_title">
-    </ListView>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="#FFFFFF"
+        android:paddingVertical="15dp"
+
+        />
 
     <LinearLayout
         android:id="@+id/option_btn_container"
@@ -76,6 +72,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/report_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="10dp"
+
+            android:layout_weight="1"
+            android:background="@drawable/btn_rounded"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:maxWidth="100dp"
+            android:text="@string/report_btn"
+
+            android:textColor="@color/white"
+
+            android:textSize="8pt" />
 
         <Button
             android:id="@+id/clear_btn"

@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "app_ULA.db";
+    private static final String DATABASE_NAME = "TICKETS_ULA.db";
     private static final int SCHEMA = 1;
     static final String TABLE = "tickets";
 
@@ -17,6 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PLACE = "hall_place";
     public static final String COLUMN_HALL = "hall_number";
     public static final String COLUMN_COST = "ticket_cost";
+    public static final String TICKET_AMOUNT = "amount";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, SCHEMA);
@@ -31,7 +32,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COLUMN_ROW + " TEXT, "
                 + COLUMN_PLACE +" TEXT, "
                 + COLUMN_HALL + " TEXT, "
-                + COLUMN_COST + " INTEGER);");
+                + COLUMN_COST + " INTEGER, "
+                + TICKET_AMOUNT + " INTEGER);");
 
     }
     @Override
@@ -40,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean addTicket(String name, String date, String row, String place, String hall, int cost) {
+    public boolean addTicket(String name, String date, String row, String place, String hall, int cost, int amount) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_NAME, name);
@@ -49,30 +51,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_PLACE, place);
         cv.put(COLUMN_HALL, hall);
         cv.put(COLUMN_COST, cost);
+        cv.put(TICKET_AMOUNT, amount);
         long result = db.insert(TABLE, null, cv);
         return result != -1;
-    }
-
-    public boolean checkCollision(String d, String r, String p, String h) {
-        Cursor cursor = getAllTickets();
-
-        while (cursor.moveToNext()) {
-            String date = cursor.getString(2);
-            String row = cursor.getString(3);
-            String place = cursor.getString(4);
-            String hall = cursor.getString(5);
-
-            if (date.equals(d) & row.equals(r) & place.equals(p) & hall.equals(h))
-                return false;
-
-        }
-
-        return true;
     }
 
     public Cursor getAllTickets() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE, null);
+    }
+
+    public Cursor getMoviesWithTicketCounts() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT " + COLUMN_NAME + ", COUNT(*), sum("+ COLUMN_COST +")" +
+                "FROM " + TABLE + " GROUP BY " + COLUMN_NAME, null);
+    }
+
+    public Cursor getTicketCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("select count(*), sum("+ COLUMN_COST +") from " + TABLE,null);
+    }
+
+    public Cursor getMinMaxDate() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("select min("+COLUMN_DATE+"), max("+COLUMN_DATE+") from " + TABLE,null);
     }
 
     public void clearTable() {

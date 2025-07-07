@@ -2,11 +2,9 @@ package com.example.ula_tickets_app;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -73,7 +71,7 @@ public class activity_settings extends AppCompatActivity {
         });
 
         save_btn.setOnClickListener(O->{
-            CacheHelper.saveToCache(getApplicationContext(), PHONE_KEY, phone.getText().toString());
+            //CacheHelper.saveToCache(getApplicationContext(), PHONE_KEY, phone.getText().toString());
             CacheHelper.saveToCache(getApplicationContext(), TICKET_COST_KEY, ticketCost.getText().toString());
             Toast.makeText(this, "Изменения сохранены", Toast.LENGTH_SHORT).show();
         });

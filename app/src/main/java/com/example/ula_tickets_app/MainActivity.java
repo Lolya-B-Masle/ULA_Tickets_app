@@ -152,10 +152,12 @@ public class MainActivity extends AppCompatActivity {
                 SimpleDateFormat ticket_date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
                 String ticketCost_str = CacheHelper.getFromCache(this, "cost", "120");
-                int ticketCost = Integer.parseInt(ticketCost_str);
+                String[] placesList = hall_places.getText().toString().split(",");
+                int ticketAmount = placesList.length;
+                int ticketCost = Integer.parseInt(ticketCost_str) * ticketAmount;
 
                 databaseHelper.addTicket(movie_name.getSelectedItem().toString(), ticket_date.format(now), hall_row.getSelectedItem().toString(),
-                        hall_places.getText().toString(), movie_hall.getSelectedItem().toString(), ticketCost);
+                        hall_places.getText().toString(), movie_hall.getSelectedItem().toString(), ticketCost, ticketAmount);
 
                 String message = "Билет сохранён в папке «БИЛЕТЫ_В_КИНО» вашей галереи";
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
@@ -168,12 +170,14 @@ public class MainActivity extends AppCompatActivity {
                     String row = "*"+hall_row.getSelectedItem().toString()+"*";
                     String place = "*"+hall_places.getText().toString()+"*";
                     String hall = "*"+movie_hall.getSelectedItem().toString()+"*";
+                    String phone = "*"+phone_number.getText().toString()+"*";
                     String WA_message = "Фильм: "+name+'\n'+
                             "Дата: "+date+'\n'+
                             "Время: "+time+'\n'+
                             "Ряд: "+row+'\n'+
                             "Место: "+place+'\n'+
-                            "Зал: "+hall;
+                            "Зал: "+hall+'\n'+
+                            "Н-т: "+phone;
 
                     openWhatsApp(WA_message);
 
@@ -335,7 +339,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }).start();
     }
-
     public String[] formatDateForParser(String date) {
         String[] dateStr = date.trim().split(" ");
         Log.d("Элементы строки даты", dateStr[0] + " - " + dateStr[1]);

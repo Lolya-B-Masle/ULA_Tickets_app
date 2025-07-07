@@ -37,7 +37,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(files("E:\\diploma\\ULA_Ticket\\jsoup-1.20.1.jar"))
+    implementation(files("E:\\Diploma2025\\ULA_Ticket\\app\\jsoup-1.21.1.jar"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

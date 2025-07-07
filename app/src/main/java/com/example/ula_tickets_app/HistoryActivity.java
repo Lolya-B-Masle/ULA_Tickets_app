@@ -2,6 +2,8 @@ package com.example.ula_tickets_app;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,16 +19,23 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Locale;
 
 public class HistoryActivity extends AppCompatActivity {
 
-    Button exit_btn, clear_btn;
+    Button exit_btn, clear_btn, report_btn;
     DatabaseHelper databaseHelper;
     SQLiteDatabase db;
+    Bitmap BG;
     TextView status;
     ListView item_list;
+    private final Date now = new Date();
+    private final SimpleDateFormat date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+    private final SimpleDateFormat time = new SimpleDateFormat("HH:mm.ss", Locale.getDefault());
 
     @Override
     protected void onCreate(@NonNull Bundle savedInstanceState) {
@@ -42,13 +51,18 @@ public class HistoryActivity extends AppCompatActivity {
 
         exit_btn = findViewById(R.id.exit_btn);
         clear_btn = findViewById(R.id.clear_btn);
+        report_btn = findViewById(R.id.report_btn);
         item_list = findViewById(R.id.ticketsList);
         status = findViewById(R.id.status);
+
+        BG = BitmapFactory.decodeResource(getResources(), R.drawable.report_back);
 
         exit_btn.setOnClickListener(v ->  finish());
         clear_btn.setOnClickListener(v -> showClearConfirmationDialog());
 
         db = databaseHelper.getReadableDatabase();
+
+        report_btn.setOnClickListener(v -> ReportGenerator.generateReportFile(this, date.format(now), time.format(now), BG));
 
         loadData();
     }
@@ -86,7 +100,8 @@ public class HistoryActivity extends AppCompatActivity {
                 String place = cursor.getString(4);
                 String hall = cursor.getString(5);
                 String ticketCost = cursor.getString(6);
-                TicketsList.add(splitLine+" "+ticketCost+"₽\n"+movie_name+": "+date+"\n"+row+" р, м "+place+", зал "+hall+'\n'+splitLine);
+                String amount = cursor.getString(7);
+                TicketsList.add(splitLine+" "+ticketCost+"₽\n"+movie_name+": "+date+"\n"+row+" ряд  |  места: "+place+"  |  "+hall+" зал"+'\n'+splitLine +" "+ amount +" шт.");
                 ticketsAmount++;
                 cost+=Integer.parseInt(ticketCost);
             }
