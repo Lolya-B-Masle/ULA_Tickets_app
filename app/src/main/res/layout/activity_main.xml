@@ -49,9 +49,10 @@
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
 
-        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -63,10 +64,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:paddingStart="40dp"
-
-            android:paddingEnd="40dp"
-            android:paddingBottom="20dp">
+            android:paddingHorizontal="40dp"
+            android:paddingBottom="40dp">
 
 
             <TextView
@@ -130,8 +129,7 @@
                 android:paddingVertical="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_place_view"
-                android:visibility="visible">
+                app:layout_constraintTop_toBottomOf="@+id/movie_place_view">
 
                 <TextView
                     android:id="@+id/movie_hall_label"
@@ -153,43 +151,6 @@
                     android:inputType="text"
                     android:minHeight="48dp"
                     android:textAlignment="center" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/client_phone_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="horizontal"
-                android:paddingVertical="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_hall_view"
-                android:visibility="visible">
-
-                <TextView
-                    android:id="@+id/client_phone_label"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-
-                    android:layout_marginEnd="15dp"
-                    android:fontFamily="sans-serif-condensed-medium"
-                    android:text="@string/client_label"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/gray"
-                    android:textSize="8pt" />
-
-                <EditText
-                    android:id="@+id/client_phone_field"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="@string/default_hint"
-                    android:inputType="phone|number"
-                    android:minHeight="48dp"
-                    android:textAlignment="center"
-                    android:maxLength="11"
-                    android:textSize="10pt" />
             </LinearLayout>
 
             <LinearLayout
@@ -329,7 +290,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
 
-                android:background="@drawable/btn_rounded"
+                android:background="@drawable/buttons_blue_main_btn"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:paddingVertical="15dp"
                 android:text="@string/submit_btn"
@@ -347,25 +308,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:layout_marginTop="50dp"
-                android:background="@drawable/clear_btn"
-                android:fontFamily="sans-serif-condensed-medium"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/buttons_clear_btn"
 
+                android:fontFamily="sans-serif-condensed-medium"
                 android:text="@string/clear_btn"
                 android:textColor="@color/white"
                 android:textSize="8pt"
                 app:layout_constraintStart_toStartOf="@+id/done_btn"
-                app:layout_constraintTop_toBottomOf="@+id/client_phone_view" />
+                app:layout_constraintTop_toBottomOf="@+id/movie_hall_view" />
 
             <Button
                 android:id="@+id/history_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="180dp"
+                android:layout_marginTop="160dp"
 
-                android:background="@drawable/btn_rounded"
-                android:fontFamily="sans-serif-condensed-medium"
                 android:paddingVertical="15dp"
+                android:background="@drawable/buttons_blue_main_btn"
+                android:fontFamily="sans-serif-condensed-medium"
+
                 android:text="@string/history_btn"
 
                 android:textColor="@color/white"
@@ -373,24 +335,6 @@
                 android:textSize="8pt"
                 app:layout_constraintEnd_toEndOf="@+id/done_btn"
                 app:layout_constraintTop_toBottomOf="@+id/done_btn" />
-
-            <Button
-                android:id="@+id/settings_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="50dp"
-
-                android:background="@drawable/btn_rounded"
-                android:fontFamily="sans-serif-condensed-medium"
-                android:paddingVertical="15dp"
-                android:text="@string/settings_btn"
-
-                android:textColor="@color/white"
-
-                android:textSize="8pt"
-                app:layout_constraintEnd_toEndOf="@+id/history_btn"
-                app:layout_constraintTop_toBottomOf="@+id/history_btn" />
 
             <TextView
                 android:id="@+id/textView"
@@ -406,17 +350,6 @@
 
                 app:layout_constraintStart_toStartOf="@+id/title"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Конец..."
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settings_btn" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

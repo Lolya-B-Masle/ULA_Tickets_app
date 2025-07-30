@@ -1,9 +1,12 @@
 <resources>
-    <string name="app_version">V2.00</string>
+    <string name="app_version">Версия 3.00</string>
 
-    <string name="title">Создание купона</string>
+    <string name="title">Создание билета</string>
     <string name="history_page_title">История</string>
+    <string name="main_page_header">Выберите тип билета:</string>
 
+    <string name="Ticket_type_1">Билет в кино</string>
+    <string name="Ticket_type_2">Билет на концерт</string>
 
     <string name="movie_name_label">Фильм:</string>
     <string name="movie_hall_label">Зал: </string>
@@ -13,11 +16,13 @@
     <string name="movie_place_label">Место / места</string>
     <string name="client_label">Тел.</string>
 
-    <string name="submit_btn">✅ Готово</string>
-    <string name="clear_btn">🗑️ Очистить</string>
-    <string name="report_btn">📑 Отчет</string>
-    <string name="history_btn">📜 История</string>
-    <string name="settings_btn">⚙️ Настройки</string>
+    <string name="submit_btn">Готово</string>
+    <string name="clear_btn">Очистить</string>
+    <string name="report_btn">Отчет</string>
+    <string name="history_btn">История</string>
+    <string name="settings_btn">Настройки</string>
+    <string name="save_btn">Сохранить</string>
+    <string name="back_btn">Назад</string>
 
     <string name="show_2_weeks">🔍 Все</string>
     <string name="show_1_day">🔍 1 день</string>
@@ -29,9 +34,6 @@
     <string name="settings_WA_open_text">Открывать WhatsApp после создания билета</string>
     <string name="settings_phone_number_text">Показывать номер телефона</string>
     <string name="settings_btn_text">💾 Сохранить</string>
-
-
-    <string name="back_btn">✖️️️</string>
 
     <string name="default_hint">- 📝 -</string>
     <string name="scrollView_desc">История пуста...</string>

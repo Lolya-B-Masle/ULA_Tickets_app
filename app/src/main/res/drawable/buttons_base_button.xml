@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Состояние нажатия -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="15dp" />
+            <solid android:color="#D0DB6A0B" />
+        </shape>
+    </item>
+
+    <!-- Нормальное состояние -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="15dp" />
+            <gradient
+                android:startColor="#A66B2FE9"
+                android:centerColor="#A6C42FE9"
+                android:endColor="#A6862FE9"
+                android:angle="45"/>
+        </shape>
+    </item>
+</selector>

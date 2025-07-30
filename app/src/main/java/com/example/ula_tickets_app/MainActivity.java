@@ -51,8 +51,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout hall_view;
     DatabaseHelper databaseHelper;
     private FrameLayout progressBar;
-    private final String sourceURL = "https://perviymall.ru/radugarub/kino/";
-    private final String userAgent = "Chrome/96.0.4664.93 Safari/537.36", referrer = "https://google.com";
+    private final String sourceURL = "https://perviymall.ru/radugarub/kino/", userAgent = "Chrome/96.0.4664.93 Safari/537.36", referrer = "https://google.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,16 +67,15 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
         databaseHelper = new DatabaseHelper(getApplicationContext());
 
-        company_logo = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
-        cinema_logo = BitmapFactory.decodeResource(getResources(), R.drawable.rainbow_logo);
-        divider = BitmapFactory.decodeResource(getResources(), R.drawable.divider);
-        BG = BitmapFactory.decodeResource(getResources(), R.drawable.background);
-        ticket_text = BitmapFactory.decodeResource(getResources(), R.drawable.ticket_text);
+        company_logo = BitmapFactory.decodeResource(getResources(), R.drawable.images_logo);
+        cinema_logo = BitmapFactory.decodeResource(getResources(), R.drawable.images_rainbow_logo);
+        divider = BitmapFactory.decodeResource(getResources(), R.drawable.images_divider);
+        BG = BitmapFactory.decodeResource(getResources(), R.drawable.images_ticket_background);
+        ticket_text = BitmapFactory.decodeResource(getResources(), R.drawable.images_ticket_text);
 
         done_btn = findViewById(R.id.done_btn);
         clear_btn = findViewById(R.id.clear_btn);
         history_btn = findViewById(R.id.history_btn);
-        settings_btn = findViewById(R.id.settings_btn);
 
         movie_name = findViewById(R.id.movie_name_field);
         movie_date = findViewById(R.id.movie_date_field);
@@ -86,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         movie_hall = findViewById(R.id.movie_hall_field);
 
         hall_places = findViewById(R.id.movie_place_field);
-        phone_number = findViewById(R.id.client_phone_field);
 
         progressBar = findViewById(R.id.progressBar);
 
@@ -129,11 +126,6 @@ public class MainActivity extends AppCompatActivity {
 
         history_btn.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
-            startActivity(intent);
-        });
-
-        settings_btn.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, activity_settings.class);
             startActivity(intent);
         });
 

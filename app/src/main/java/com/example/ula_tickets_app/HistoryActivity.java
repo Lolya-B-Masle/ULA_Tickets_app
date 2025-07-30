@@ -55,7 +55,7 @@ public class HistoryActivity extends AppCompatActivity {
         item_list = findViewById(R.id.ticketsList);
         status = findViewById(R.id.status);
 
-        BG = BitmapFactory.decodeResource(getResources(), R.drawable.report_back);
+        BG = BitmapFactory.decodeResource(getResources(), R.drawable.images_report_back);
 
         exit_btn.setOnClickListener(v ->  finish());
         clear_btn.setOnClickListener(v -> showClearConfirmationDialog());
