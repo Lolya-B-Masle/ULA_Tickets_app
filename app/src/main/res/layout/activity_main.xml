@@ -73,12 +73,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:fontFamily="sans-serif-condensed-medium"
-                android:text="@string/title"
+                android:text="@string/movie_page_title"
                 android:textAlignment="center"
 
                 android:textColor="@color/black"
                 android:textSize="18pt"
+                android:fontFamily="@font/podarok"
 
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -100,12 +100,12 @@
 
                 <TextView
                     android:id="@+id/movie_name_label"
-                    android:layout_width="60dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
 
-                    android:layout_marginRight="15dp"
-                    android:fontFamily="sans-serif-condensed-medium"
-                    android:text="@string/movie_name_label"
+                    android:layout_marginRight="5dp"
+                    android:fontFamily="@font/unageo_bold"
+                    android:text="@string/name_label"
                     android:textAlignment="textStart"
                     android:textColor="@color/gray"
                     android:textSize="8pt" />
@@ -133,12 +133,12 @@
 
                 <TextView
                     android:id="@+id/movie_hall_label"
-                    android:layout_width="60dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
 
-                    android:layout_marginEnd="15dp"
-                    android:fontFamily="sans-serif-condensed-medium"
-                    android:text="@string/movie_hall_label"
+                    android:layout_marginEnd="5dp"
+                    android:fontFamily="@font/unageo_bold"
+                    android:text="@string/hall_label"
                     android:textAlignment="textStart"
                     android:textColor="@color/gray"
                     android:textSize="8pt" />
@@ -166,12 +166,12 @@
 
                 <TextView
                     android:id="@+id/movie_date_label"
-                    android:layout_width="60dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginEnd="5dp"
 
-                    android:fontFamily="sans-serif-condensed-medium"
-                    android:text="@string/movie_date_label"
+                    android:fontFamily="@font/unageo_bold"
+                    android:text="@string/date_label"
                     android:textColor="@color/black"
                     android:textSize="8pt" />
 
@@ -198,12 +198,12 @@
 
                 <TextView
                     android:id="@+id/movie_time_label"
-                    android:layout_width="60dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginEnd="5dp"
 
-                    android:fontFamily="sans-serif-condensed-medium"
-                    android:text="@string/movie_time_label"
+                    android:fontFamily="@font/unageo_bold"
+                    android:text="@string/time_label"
                     android:textColor="@color/gray"
                     android:textSize="8pt" />
 
@@ -230,12 +230,12 @@
 
                 <TextView
                     android:id="@+id/movie_row_label"
-                    android:layout_width="60dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
 
-                    android:layout_marginEnd="15dp"
-                    android:fontFamily="sans-serif-condensed-medium"
-                    android:text="@string/movie_row_label"
+                    android:layout_marginEnd="5dp"
+                    android:fontFamily="@font/unageo_bold"
+                    android:text="@string/row_label"
                     android:textAlignment="textStart"
                     android:textColor="@color/gray"
                     android:textSize="8pt" />
@@ -265,8 +265,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:fontFamily="sans-serif-condensed-medium"
-                    android:text="@string/movie_place_label"
+                    android:fontFamily="@font/unageo_bold"
+                    android:text="@string/place_label"
                     android:textAlignment="center"
                     android:textColor="@color/gray"
                     android:textSize="8pt" />
@@ -284,39 +284,86 @@
                     android:textSize="10pt" />
             </LinearLayout>
 
-            <Button
+            <LinearLayout
                 android:id="@+id/done_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+
                 android:layout_marginTop="40dp"
+                android:background="@drawable/buttons_done_btn_main_background"
 
-                android:background="@drawable/buttons_blue_main_btn"
-                android:fontFamily="sans-serif-condensed-medium"
-                android:paddingVertical="15dp"
-                android:text="@string/submit_btn"
-
-                android:textColor="@color/white"
-
-                android:textSize="8pt"
+                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/clear_btn" />
+                app:layout_constraintTop_toBottomOf="@+id/clear_btn" >
 
-            <Button
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+
+                    android:background="@drawable/buttons_done_btn_image_background"
+                    android:padding="4dp"
+                    android:layout_marginEnd="25dp"
+
+                    app:srcCompat="@drawable/icons_done_btn_icon" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/hikasami_bold"
+                    android:textSize="10pt"
+
+                    android:text="@string/submit_btn" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/clear_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
 
                 android:layout_marginTop="40dp"
-                android:background="@drawable/buttons_clear_btn"
+                android:background="@drawable/buttons_clear_btn_main_background"
 
-                android:fontFamily="sans-serif-condensed-medium"
-                android:text="@string/clear_btn"
-                android:textColor="@color/white"
-                android:textSize="8pt"
+                android:gravity="center"
+
                 app:layout_constraintStart_toStartOf="@+id/done_btn"
-                app:layout_constraintTop_toBottomOf="@+id/movie_hall_view" />
+                app:layout_constraintTop_toBottomOf="@+id/movie_hall_view" >
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+
+                    android:background="@drawable/buttons_clear_btn_image_background"
+                    android:padding="4dp"
+                    android:layout_marginEnd="25dp"
+
+                    app:srcCompat="@drawable/icons_clear_btn_icon" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/hikasami_bold"
+                    android:textSize="10pt"
+
+                    android:text="@string/clear_btn" />
+
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/history_btn"
@@ -325,7 +372,7 @@
                 android:layout_marginTop="160dp"
 
                 android:paddingVertical="15dp"
-                android:background="@drawable/buttons_blue_main_btn"
+                android:background="@drawable/buttons_done_btn_image_background"
                 android:fontFamily="sans-serif-condensed-medium"
 
                 android:text="@string/history_btn"
@@ -335,21 +382,6 @@
                 android:textSize="8pt"
                 app:layout_constraintEnd_toEndOf="@+id/done_btn"
                 app:layout_constraintTop_toBottomOf="@+id/done_btn" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:fontFamily="sans-serif-condensed-medium"
-                android:padding="1dp"
-                android:text="@string/app_version"
-                android:textColor="@color/l2_gray"
-                android:textSize="16sp"
-                android:textStyle="bold"
-
-                app:layout_constraintStart_toStartOf="@+id/title"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

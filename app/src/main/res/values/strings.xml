@@ -1,20 +1,20 @@
 <resources>
     <string name="app_version">Версия 3.00</string>
 
-    <string name="title">Создание билета</string>
+    <string name="movie_page_title">Билет в кино</string>
+    <string name="concert_page_title">Билет на концерт</string>
     <string name="history_page_title">История</string>
     <string name="main_page_header">Выберите тип билета:</string>
 
     <string name="Ticket_type_1">Билет в кино</string>
     <string name="Ticket_type_2">Билет на концерт</string>
 
-    <string name="movie_name_label">Фильм:</string>
-    <string name="movie_hall_label">Зал: </string>
-    <string name="movie_date_label">Дата:</string>
-    <string name="movie_time_label">Сеанс:</string>
-    <string name="movie_row_label">Ряд:</string>
-    <string name="movie_place_label">Место / места</string>
-    <string name="client_label">Тел.</string>
+    <string name="name_label">Фильм:</string>
+    <string name="hall_label">Зал: </string>
+    <string name="date_label">Дата:</string>
+    <string name="time_label">Сеанс:</string>
+    <string name="row_label">Ряд:</string>
+    <string name="place_label">Место / места</string>
 
     <string name="submit_btn">Готово</string>
     <string name="clear_btn">Очистить</string>

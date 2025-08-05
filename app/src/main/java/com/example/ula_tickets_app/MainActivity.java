@@ -44,11 +44,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class MainActivity extends AppCompatActivity {
-    TextView hall_places, phone_number;
+    TextView hall_places;
     Spinner movie_name, movie_date, movie_time, hall_row, movie_hall;
-    Button done_btn, clear_btn, history_btn, settings_btn;
+    Button history_btn, settings_btn;
     Bitmap company_logo, cinema_logo, divider, BG, ticket_text;
-    LinearLayout hall_view;
+    LinearLayout hall_view, clear_btn, done_btn;
     DatabaseHelper databaseHelper;
     private FrameLayout progressBar;
     private final String sourceURL = "https://perviymall.ru/radugarub/kino/", userAgent = "Chrome/96.0.4664.93 Safari/537.36", referrer = "https://google.com";
@@ -131,9 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
         done_btn.setOnClickListener(v -> {
             if (movie_name.getSelectedItem().equals("Нет сеансов на эту дату.") || movie_hall.getSelectedItem().toString().isEmpty()
-                    || hall_row.getSelectedItem().toString().isEmpty() || hall_places.getText().toString().isEmpty() || phone_number.getText().toString().isEmpty()
-                    || phone_number.getText().toString().length() < 11
-            ) {
+                    || hall_row.getSelectedItem().toString().isEmpty() || hall_places.getText().toString().isEmpty()) {
                 Toast.makeText(this, "Для создания билета необходимо заполнить все поля", Toast.LENGTH_SHORT).show();
             } else {
                 v.setEnabled(false);
@@ -162,17 +160,14 @@ public class MainActivity extends AppCompatActivity {
                     String row = "*"+hall_row.getSelectedItem().toString()+"*";
                     String place = "*"+hall_places.getText().toString()+"*";
                     String hall = "*"+movie_hall.getSelectedItem().toString()+"*";
-                    String phone = "*"+phone_number.getText().toString()+"*";
                     String WA_message = "Фильм: "+name+'\n'+
                             "Дата: "+date+'\n'+
                             "Время: "+time+'\n'+
                             "Ряд: "+row+'\n'+
                             "Место: "+place+'\n'+
-                            "Зал: "+hall+'\n'+
-                            "Н-т: "+phone;
+                            "Зал: "+hall+'\n';
 
                     openWhatsApp(WA_message);
-
                 }
 
                 new Handler().postDelayed(() -> v.setEnabled(true), 5000);
@@ -382,20 +377,6 @@ public class MainActivity extends AppCompatActivity {
 
     // --------------------------------------------- Text helper -----------------------
 
-    public static String formatPhoneNumber(String number) {
-        if (number == null || number.length() != 11 || !number.matches("\\d+")) {
-            throw new IllegalArgumentException("Некорректный номер телефона");
-        }
-        return String.format(
-                "%s-%s-%s-%s-%s",
-                number.substring(0, 1),
-                number.substring(1, 4),
-                number.substring(4, 7),
-                number.substring(7, 9),
-                number.substring(9)
-        );
-    }
-
     public static String[] splitStringByLastSpace(String input, int maxLength) {
         if (input == null || input.length() <= maxLength)
             return new String[]{input};
@@ -425,7 +406,7 @@ public class MainActivity extends AppCompatActivity {
         ticket.generateTicketImage(this, BG, cinema_logo, company_logo, divider, ticket_text,
                 splitStringByLastSpace(movie_name.getSelectedItem().toString(), 20),
                 movie_date, movie_time.getSelectedItem().toString(),
-                hall_row.getSelectedItem().toString(), hall_places.getText().toString(), movie_hall.getSelectedItem().toString(), formatPhoneNumber(phone_number.getText().toString()));
+                hall_row.getSelectedItem().toString(), hall_places.getText().toString(), movie_hall.getSelectedItem().toString());
     }
 
 }

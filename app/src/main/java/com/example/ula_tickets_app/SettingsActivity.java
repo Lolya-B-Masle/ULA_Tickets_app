@@ -2,8 +2,11 @@ package com.example.ula_tickets_app;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -12,6 +15,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SettingsActivity extends AppCompatActivity {
     String TICKET_COST_KEY = "cost";
     String IS_DIP_KEY = "isDip";
@@ -19,9 +25,9 @@ public class SettingsActivity extends AppCompatActivity {
     String isWAKey_status = "";
 
     boolean isChecked = false;
-
     LinearLayout exit_btn, save_btn;
     CheckBox WA_open;
+    EditText ticketCost;
 
 
     @Override
@@ -38,23 +44,13 @@ public class SettingsActivity extends AppCompatActivity {
         save_btn = findViewById(R.id.save_btn);
         exit_btn = findViewById(R.id.back_btn);
 
+        ticketCost = findViewById(R.id.ticketCost_field);
+
         WA_open = findViewById(R.id.WA_open);
 
         exit_btn.setOnClickListener(v ->  finish());
 
         loadDataFromCache(this);
-
-        /*
-        List<Integer> rowList = new ArrayList<>();
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, rowList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        hall_row.setAdapter(adapter);
-
-        for (int i = 1; i < 9; i++){
-            rowList.add(i);
-            adapter.notifyDataSetChanged();
-        }
-         */
 
         WA_open.setOnClickListener(v -> {
             isChecked = ((CheckBox) v).isChecked();
@@ -67,14 +63,14 @@ public class SettingsActivity extends AppCompatActivity {
 
         save_btn.setOnClickListener(O->{
             //CacheHelper.saveToCache(getApplicationContext(), PHONE_KEY, phone.getText().toString());
-            //CacheHelper.saveToCache(getApplicationContext(), TICKET_COST_KEY, ticketCost.getText().toString());
+            CacheHelper.saveToCache(getApplicationContext(), TICKET_COST_KEY, ticketCost.getText().toString());
             Toast.makeText(this, "Изменения сохранены", Toast.LENGTH_SHORT).show();
         });
 
     }
 
     public void loadDataFromCache(Context context) {
-        //ticketCost.setText(CacheHelper.getFromCache(context, TICKET_COST_KEY, ""));
+        ticketCost.setText(CacheHelper.getFromCache(context, TICKET_COST_KEY, ""));
 
         isWAKey_status = CacheHelper.getFromCache(context, WA_OPEN_KEY, "false");
         if (isWAKey_status.equals("false"))

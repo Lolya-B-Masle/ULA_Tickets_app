@@ -80,7 +80,7 @@
             android:layout_marginHorizontal="10dp"
 
             android:layout_weight="1"
-            android:background="@drawable/buttons_blue_main_btn"
+            android:background="@drawable/buttons_done_btn_image_background"
             android:fontFamily="sans-serif-condensed-medium"
             android:maxWidth="100dp"
             android:text="@string/report_btn"
@@ -96,7 +96,7 @@
             android:layout_marginHorizontal="10dp"
 
             android:layout_weight="1"
-            android:background="@drawable/buttons_blue_main_btn"
+            android:background="@drawable/buttons_done_btn_image_background"
             android:fontFamily="sans-serif-condensed-medium"
             android:maxWidth="100dp"
             android:text="@string/clear_btn"

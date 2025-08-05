@@ -11,6 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="20dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,72 +113,70 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="15dp"
 
-                    android:background="@drawable/buttons_pink_main_btn"
+                    android:background="@drawable/buttons_movie_btn_main_background"
 
                     android:gravity="center"
 
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/MovieOptionImage"
-                        android:layout_width="80dp"
-                        android:layout_height="90dp"
-                        android:padding="8dp"
+                        android:id="@+id/imageView3"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+
+                        android:background="@drawable/buttons_movie_btn_image_background"
+                        android:padding="6dp"
+                        android:layout_marginEnd="25dp"
+
                         app:srcCompat="@drawable/icons_movie_btn_icon" />
 
                     <TextView
-                        android:id="@+id/MovieOptionTitle"
+                        android:id="@+id/textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
-                        android:fontFamily="@font/unageo_bold"
-                        android:paddingLeft="5dp"
-                        android:text="@string/Ticket_type_1"
                         android:textAlignment="textStart"
+
                         android:textColor="@color/white"
+                        android:fontFamily="@font/hikasami_bold"
+                        android:textSize="10pt"
 
-                        android:textSize="12pt"
-                        tools:ignore="TextSizeCheck" />
+                        android:text="@string/Ticket_type_1" />
                 </LinearLayout>
-
-                <View
-                    android:id="@+id/OptionSpace"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
 
                 <LinearLayout
                     android:id="@+id/ConcertOptionContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="10dp"
+                    android:layout_marginVertical="15dp"
 
-                    android:background="@drawable/buttons_pink_main_btn"
+                    android:background="@drawable/buttons_concert_btn_main_background"
 
                     android:gravity="center"
 
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/ConcertOptionImage"
-                        android:layout_width="80dp"
-                        android:layout_height="90dp"
-                        android:padding="8dp"
+                        android:id="@+id/imageView7"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+
+                        android:background="@drawable/buttons_concert_btn_image_background"
+                        android:padding="6dp"
+                        android:layout_marginEnd="25dp"
+
                         app:srcCompat="@drawable/icons_concert_btn_icon" />
 
                     <TextView
-                        android:id="@+id/ConcertOptionTitle"
+                        android:id="@+id/textView43"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-
-                        android:fontFamily="@font/unageo_bold"
-                        android:paddingLeft="5dp"
-                        android:text="@string/Ticket_type_2"
                         android:textAlignment="textStart"
-                        android:textColor="@color/white"
 
-                        android:textSize="12pt"
-                        tools:ignore="TextSizeCheck" />
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/hikasami_bold"
+                        android:textSize="10pt"
+
+                        android:text="@string/Ticket_type_2" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
