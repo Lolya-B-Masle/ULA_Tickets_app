@@ -13,8 +13,9 @@
     <string name="hall_label">Зал: </string>
     <string name="date_label">Дата:</string>
     <string name="time_label">Сеанс:</string>
+    <string name="time_label_second">Время:</string>
     <string name="row_label">Ряд:</string>
-    <string name="place_label">Место / места</string>
+    <string name="place_label">Место:</string>
 
     <string name="submit_btn">Готово</string>
     <string name="clear_btn">Очистить</string>
@@ -35,7 +36,7 @@
     <string name="settings_phone_number_text">Показывать номер телефона</string>
     <string name="settings_btn_text">💾 Сохранить</string>
 
-    <string name="default_hint">- 📝 -</string>
+    <string name="default_hint">- ввод -</string>
     <string name="scrollView_desc">История пуста...</string>
 
     <string name="dateTime_val_hint">Выбрать ▽</string>

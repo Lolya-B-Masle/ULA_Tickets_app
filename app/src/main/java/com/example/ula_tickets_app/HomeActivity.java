@@ -35,13 +35,15 @@ public class HomeActivity extends AppCompatActivity {
         toInfoPageBtn = findViewById(R.id.InfoButton);
 
         toMoviePageBtn.setOnClickListener(V-> { // To movie page
-            Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+            Intent intent = new Intent(HomeActivity.this, MovieActivity.class);
             startActivity(intent);
             Log.d("ClickEvent", "Click on MOVIE option");
         });
 
-        toConcertPageBtn.setOnClickListener(V-> {
-
+        toConcertPageBtn.setOnClickListener(V-> { // To concert page
+            Intent intent = new Intent(HomeActivity.this, ConcertActivity.class);
+            startActivity(intent);
+            Log.d("ClickEvent", "Click on CONCERT option");
         });
 
         toSettingsPageBtn.setOnClickListener(V-> {

@@ -6,14 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
+
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -26,18 +24,8 @@ public class TicketCreator {
     private final SimpleDateFormat movie_year = new SimpleDateFormat(".yyyy", Locale.getDefault());
     private final Paint paint = new Paint();
 
-    public File generateTicketImage(Context context, Bitmap BG, Bitmap R_logo, Bitmap U_logo, Bitmap divider, Bitmap dec_text,
-                                    String[] movieTitle, String date, String time,
-                                    String row, String seat, String hall) {
-        Bitmap bitmap = createTicketBitmap(BG, R_logo, U_logo, divider, dec_text, movieTitle, date, time, row, seat, hall);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-            return saveForAndroid10Plus(context, bitmap, date, time);
-        else
-            return saveLegacy(context, bitmap, date, time);
-    }
-
-    private Bitmap createTicketBitmap(Bitmap BG, Bitmap R_logo, Bitmap U_logo, Bitmap divider, Bitmap dec_text,
+    // Generate movie ticket
+    public Bitmap createTicket_Movie(Bitmap BG, Bitmap R_logo, Bitmap U_logo, Bitmap divider, Bitmap dec_text,
                                              String[] movieTitle, String date, String time,
                                              String row, String seat, String hall) {
         int width = 1080;
@@ -52,7 +40,7 @@ public class TicketCreator {
         setBitmap(dec_text, 704, 445, 60, 1470, canvas);
 
         setMovieName(movieTitle, canvas);
-        setMovieDateTime(date, time, canvas);
+        setDateTime(date, time, canvas);
         setMoviePlace(hall, row, seat, canvas);
 
         setTicket_date(canvas);
@@ -60,34 +48,68 @@ public class TicketCreator {
         return bitmap;
     }
 
-    protected void setCinemaLogo(Bitmap logo, Canvas canvas) {
+    // Generate concert ticket
+    public Bitmap createTicket_Concert(Bitmap BG, Bitmap logo, Bitmap divider, Bitmap dec_text, String date, String time,
+                                      String row, String seat, String hall) {
+        int width = 1080;
+        int height = 1920;
+        Bitmap bitmap = Bitmap.createScaledBitmap(BG, width, height, false);
+        Canvas canvas = new Canvas(bitmap);
+
+        setCompanyLogo(logo, canvas);
+        setDivider(divider, canvas);
+
+        setBitmap(dec_text, 704, 445, 60, 1470, canvas);
+
+        setDateTime(date, time, canvas);
+        setMoviePlace(hall, row, seat, canvas);
+
+        setTicket_date(canvas);
+
+        return bitmap;
+    }
+
+    // Save ticket in gallery
+    public void saveTicket(Context context, Bitmap bitmap, String date, String time, String folder) {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, "Билет_" + date + "_" + time + ".jpg");
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/" + folder);
+
+        Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        if (uri == null) return;
+
+        try (OutputStream out = context.getContentResolver().openOutputStream(uri)) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            new File(uri.getPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String message = "Билет сохранён в папке "+ folder +" вашей галереи";
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    // Set logos on ticket
+    private void setCinemaLogo(Bitmap logo, Canvas canvas) {
         Bitmap logo_scaled = Bitmap.createScaledBitmap(logo, 520, 520, false);
         canvas.drawBitmap(logo_scaled, 0, -34, paint);
     }
-
-    protected void setCompanyLogo(Bitmap logo, Canvas canvas) {
+    private void setCompanyLogo(Bitmap logo, Canvas canvas) {
         Bitmap logo_scaled = Bitmap.createScaledBitmap(logo, 448, 345, false);
         canvas.drawBitmap(logo_scaled, 585, 10, paint);
     }
-
-    protected void setDivider(Bitmap logo, Canvas canvas) {
+    private void setDivider(Bitmap logo, Canvas canvas) {
         Bitmap logo_scaled = Bitmap.createScaledBitmap(logo, 920, 150, false);
         canvas.drawBitmap(logo_scaled, 80, 370, paint);
     }
-
-    protected void setBitmap(Bitmap bmp, int width, int height, int x, int y, Canvas canvas) {
+    private void setBitmap(Bitmap bmp, int width, int height, int x, int y, Canvas canvas) {
         Bitmap bmp_scaled = Bitmap.createScaledBitmap(bmp, width, height, false);
         canvas.drawBitmap(bmp_scaled, x, y, paint);
     }
 
-    protected void setClientPhoneNumber(String phone, Canvas canvas) {
-        paint.setColor(Color.DKGRAY);
-        paint.setTextSize(50);
-
-        canvas.drawText(phone, 350, 425, paint);
-    }
-
-    protected void setMovieName(String[] movie_name, Canvas canvas) {
+    // Set text on ticket
+    private void setMovieName(String[] movie_name, Canvas canvas) {
         paint.setColor(Color.BLACK);
 
         paint.setTextSize(35);
@@ -106,15 +128,13 @@ public class TicketCreator {
 
         paint.setFakeBoldText(false);
     }
-
-    protected void setTicket_date(Canvas canvas) {
+    private void setTicket_date(Canvas canvas) {
         paint.setColor(Color.LTGRAY);
         paint.setTextSize(35);
 
         canvas.drawText(ticket_date.format(now), 12, 35, paint);
     }
-
-    protected void setMovieDateTime(String date_value, String time_value, Canvas canvas) {
+    private void setDateTime(String date_value, String time_value, Canvas canvas) {
         paint.setColor(Color.BLACK);
 
         paint.setTextSize(45);
@@ -127,8 +147,7 @@ public class TicketCreator {
         canvas.drawText(time_value, 260, 1040, paint);
         paint.setFakeBoldText(false);
     }
-
-    protected void setMoviePlace(String hall_value, String row_value, String place_value, Canvas canvas) {
+    private void setMoviePlace(String hall_value, String row_value, String place_value, Canvas canvas) {
         paint.setColor(Color.BLACK);
 
         paint.setTextSize(45);
@@ -149,50 +168,4 @@ public class TicketCreator {
         paint.setFakeBoldText(false);
     }
 
-    private File saveLegacy(Context context, Bitmap bitmap, String date, String time) {
-        File publicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File ticketsDir = new File(publicDir, "Cinema Tickets");
-        if (!ticketsDir.exists() && !ticketsDir.mkdirs()) {
-            Toast.makeText(context, "Ошибка создания папки", Toast.LENGTH_SHORT).show();
-            return null;
-        }
-
-        File ticketFile = new File(ticketsDir, "Билет_" + date + "_" + time + ".jpg");
-
-        try (FileOutputStream out = new FileOutputStream(ticketFile)) {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            scanMediaFile(context, ticketFile);
-            return ticketFile;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private File saveForAndroid10Plus(Context context, Bitmap bitmap, String date, String time) {
-        ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, "Билет_" + date + "_" + time + ".jpg");
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-        values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/БИЛЕТЫ_В_КИНО");
-
-        Uri uri = context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-        if (uri == null) return null;
-
-        try (OutputStream out = context.getContentResolver().openOutputStream(uri)) {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            return new File(uri.getPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private void scanMediaFile(Context context, File file) {
-        MediaScannerConnection.scanFile(
-                context,
-                new String[]{file.getAbsolutePath()},
-                new String[]{"image/jpeg"},
-                (path, uri) -> Toast.makeText(context, "Билет сохранён: " + path, Toast.LENGTH_LONG).show()
-        );
-    }
 }

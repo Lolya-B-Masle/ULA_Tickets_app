@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ConcertActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:paddingStart="40dp"
+
+            android:paddingEnd="40dp"
+            android:paddingBottom="20dp">
+
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/podarok"
+                android:textSize="18pt"
+                android:textColor="@color/black"
+
+                android:text="@string/concert_page_title"
+
+                android:textAlignment="center"
+                android:layout_marginTop="16dp"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/concert_hall_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="20dp"
+
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="5dp"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/concert_place_view">
+
+                <TextView
+                    android:id="@+id/hall_label"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginEnd="5dp"
+                    android:fontFamily="@font/unageo_bold"
+
+                    android:text="@string/hall_label"
+
+                    android:textAlignment="textStart"
+                    android:textColor="@color/gray"
+                    android:textSize="8pt" />
+
+                <EditText
+                    android:id="@+id/concert_hall_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="0123456789"
+                    android:hint="@string/default_hint"
+
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minHeight="48dp"
+
+                    android:textAlignment="center"
+                    android:textSize="10pt" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/concert_date_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="horizontal"
+
+                android:gravity="center_vertical"
+                android:layout_marginTop="75dp"
+                android:paddingVertical="5dp"
+
+                app:layout_constraintStart_toStartOf="@+id/concert_hall_view"
+                app:layout_constraintTop_toBottomOf="@+id/title">
+
+                <TextView
+                    android:id="@+id/date_label"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginEnd="15dp"
+                    android:textAlignment="textStart"
+
+                    android:text="@string/date_label"
+
+                    android:fontFamily="@font/unageo_bold"
+                    android:textColor="@color/black"
+                    android:textSize="8pt" />
+
+                <TextView
+                    android:id="@+id/concert_date_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+
+                    android:paddingVertical="5dp"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+
+
+                    android:text="@string/dateTime_val_hint"
+                    android:textSize="8pt" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/concert_time_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="5dp"
+                app:layout_constraintStart_toStartOf="@+id/concert_hall_view"
+                app:layout_constraintTop_toBottomOf="@+id/concert_date_view">
+
+                <TextView
+                    android:id="@+id/time_label"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginEnd="15dp"
+                    android:textAlignment="textStart"
+
+                    android:text="@string/time_label_second"
+
+                    android:fontFamily="@font/unageo_bold"
+                    android:textColor="@color/gray"
+                    android:textSize="8pt" />
+
+                <TextView
+                    android:id="@+id/concert_time_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+
+                    android:ems="10"
+                    android:gravity="center"
+                    android:paddingVertical="5dp"
+                    android:text="@string/dateTime_val_hint"
+
+                    android:textColor="@color/black"
+                    android:textSize="8pt" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/concert_row_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:paddingVertical="5dp"
+
+                android:layout_marginTop="40dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/concert_time_view">
+
+                <TextView
+                    android:id="@+id/concert_row_label"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginEnd="5dp"
+                    android:textAlignment="textStart"
+
+                    android:text="@string/row_label"
+
+                    android:fontFamily="@font/unageo_bold"
+                    android:textColor="@color/gray"
+                    android:textSize="8pt" />
+
+                <EditText
+                    android:id="@+id/concert_row_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="0123456789,"
+                    android:ems="10"
+                    android:hint="@string/default_hint"
+                    android:inputType="number"
+                    android:minHeight="48dp"
+                    android:textAlignment="center"
+                    android:textSize="10pt" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/concert_place_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:paddingVertical="5dp"
+
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/concert_row_view">
+
+                <TextView
+                    android:id="@+id/concert_place_label"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginEnd="5dp"
+                    android:textAlignment="textStart"
+
+                    android:text="@string/place_label"
+
+                    android:fontFamily="@font/unageo_bold"
+                    android:textColor="@color/gray"
+                    android:textSize="8pt" />
+
+                <EditText
+                    android:id="@+id/concert_place_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="0123456789,-"
+                    android:ems="10"
+                    android:hint="@string/default_hint"
+                    android:inputType="number"
+                    android:minHeight="48dp"
+                    android:textAlignment="center"
+                    android:textSize="10pt" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/done_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+
+                android:layout_marginTop="40dp"
+                android:background="@drawable/buttons_done_btn_main_background"
+
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clear_btn" >
+
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+
+                    android:background="@drawable/buttons_done_btn_image_background"
+                    android:padding="4dp"
+                    android:layout_marginEnd="25dp"
+
+                    app:srcCompat="@drawable/icons_done_btn_icon" />
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/hikasami_bold"
+                    android:textSize="10pt"
+
+                    android:text="@string/submit_btn" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/clear_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+
+                android:layout_marginTop="48dp"
+                android:background="@drawable/buttons_clear_btn_main_background"
+
+                android:gravity="center"
+
+                app:layout_constraintStart_toStartOf="@+id/done_btn"
+                app:layout_constraintTop_toBottomOf="@+id/concert_hall_view" >
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+
+                    android:background="@drawable/buttons_clear_btn_image_background"
+                    android:padding="4dp"
+                    android:layout_marginEnd="25dp"
+
+                    app:srcCompat="@drawable/icons_clear_btn_icon" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/hikasami_bold"
+                    android:textSize="10pt"
+
+                    android:text="@string/clear_btn" />
+
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

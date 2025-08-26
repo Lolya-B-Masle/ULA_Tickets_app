@@ -3,7 +3,6 @@ package com.example.ula_tickets_app;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Typeface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -12,26 +11,21 @@ import android.provider.MediaStore;
 import android.widget.Toast;
 
 import android.graphics.Bitmap;
-import android.graphics.pdf.PdfDocument;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import java.text.SimpleDateFormat;
-import java.util.Random;
 
 public class ReportGenerator {
     static DatabaseHelper databaseHelper;
@@ -108,7 +102,7 @@ public class ReportGenerator {
 
 
         for (String el : soldList) {
-            String[] movie_name = MainActivity.splitStringByLastSpace(el, 25);
+            String[] movie_name = MovieActivity.splitStringByLastSpace(el, 25);
             if (movie_name.length == 2) {
                 canvas.drawText(movie_name[0], 50, y+=bias, paint);
                 bias = 40;

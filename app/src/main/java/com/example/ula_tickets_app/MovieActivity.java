@@ -43,21 +43,22 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class MainActivity extends AppCompatActivity {
+public class MovieActivity extends AppCompatActivity {
     TextView hall_places;
     Spinner movie_name, movie_date, movie_time, hall_row, movie_hall;
-    Button history_btn, settings_btn;
+    Button history_btn;
     Bitmap company_logo, cinema_logo, divider, BG, ticket_text;
     LinearLayout hall_view, clear_btn, done_btn;
     DatabaseHelper databaseHelper;
     private FrameLayout progressBar;
+    private final String MAIN_FOLDER = "БИЛЕТЫ_В_КИНО";
     private final String sourceURL = "https://perviymall.ru/radugarub/kino/", userAgent = "Chrome/96.0.4664.93 Safari/537.36", referrer = "https://google.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_movie);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         history_btn.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
+            Intent intent = new Intent(MovieActivity.this, HistoryActivity.class);
             startActivity(intent);
         });
 
@@ -136,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 v.setEnabled(false);
 
-                createTicket(movie_date.getSelectedItem().toString());
+                createTicket(movie_date.getSelectedItem().toString(), MAIN_FOLDER);
 
                 Date now = new Date();
                 SimpleDateFormat ticket_date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
@@ -149,26 +150,9 @@ public class MainActivity extends AppCompatActivity {
                 databaseHelper.addTicket(movie_name.getSelectedItem().toString(), ticket_date.format(now), hall_row.getSelectedItem().toString(),
                         hall_places.getText().toString(), movie_hall.getSelectedItem().toString(), ticketCost, ticketAmount);
 
-                String message = "Билет сохранён в папке «БИЛЕТЫ_В_КИНО» вашей галереи";
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-
                 String WA = CacheHelper.getFromCache(this, "WA", "false");
-                if (WA.equals("true")){
-                    String name = "*"+movie_name.getSelectedItem().toString()+"*";
-                    String date = "*"+movie_date.getSelectedItem().toString()+"*";
-                    String time = "*"+movie_time.getSelectedItem().toString()+"*";
-                    String row = "*"+hall_row.getSelectedItem().toString()+"*";
-                    String place = "*"+hall_places.getText().toString()+"*";
-                    String hall = "*"+movie_hall.getSelectedItem().toString()+"*";
-                    String WA_message = "Фильм: "+name+'\n'+
-                            "Дата: "+date+'\n'+
-                            "Время: "+time+'\n'+
-                            "Ряд: "+row+'\n'+
-                            "Место: "+place+'\n'+
-                            "Зал: "+hall+'\n';
-
-                    openWhatsApp(WA_message);
-                }
+                if (WA.equals("true"))
+                    openWhatsApp("");
 
                 new Handler().postDelayed(() -> v.setEnabled(true), 5000);
             }
@@ -393,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // --------------------------------------------- Image creator -----------------------
-    private void createTicket(String date) {
+    private void createTicket(String date, String folderName) {
 
         String[] parseDate = formatDateForParser(date);
 
@@ -403,10 +387,13 @@ public class MainActivity extends AppCompatActivity {
         String movie_date = day+"."+month;
 
         TicketCreator ticket = new TicketCreator();
-        ticket.generateTicketImage(this, BG, cinema_logo, company_logo, divider, ticket_text,
+
+        Bitmap bitmap = ticket.createTicket_Movie(BG, cinema_logo, company_logo, divider, ticket_text,
                 splitStringByLastSpace(movie_name.getSelectedItem().toString(), 20),
                 movie_date, movie_time.getSelectedItem().toString(),
                 hall_row.getSelectedItem().toString(), hall_places.getText().toString(), movie_hall.getSelectedItem().toString());
+
+        ticket.saveTicket(this, bitmap, movie_date, movie_time.toString(), folderName);
     }
 
 }
