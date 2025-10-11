@@ -28,7 +28,6 @@ public class HomeActivity extends AppCompatActivity {
             return insets;
         });
 
-
         toMoviePageBtn = findViewById(R.id.MovieOptionContainer);
         toConcertPageBtn = findViewById(R.id.ConcertOptionContainer);
         toSettingsPageBtn = findViewById(R.id.SettingsButton);
@@ -54,9 +53,5 @@ public class HomeActivity extends AppCompatActivity {
         toInfoPageBtn.setOnClickListener(V-> {
 
         });
-
-
-
-
     }
 }

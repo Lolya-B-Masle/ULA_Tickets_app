@@ -90,13 +90,6 @@ public class MovieActivity extends AppCompatActivity {
 
         hall_view = findViewById(R.id.movie_hall_view);
 
-
-        String isDipVer = CacheHelper.getFromCache(this, "isDip", "false");
-        if (isDipVer.equals("true")) {
-            //movie_hall.setText("уточнять у кассира");
-            hall_view.setVisibility(View.GONE);
-        }
-
         List<Integer> rowList = new ArrayList<>();
         ArrayAdapter<Integer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, rowList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -229,10 +222,14 @@ public class MovieActivity extends AppCompatActivity {
     }
     public void loadFilmsOnDate(String date) {
         String[] parseDate = formatDateForParser(date);
+        Date currentYear = new Date();
 
         String day = parseDate[0];
         String month = parseDate[1];
-        String url = "https://firstmall.ru/radugarub/kino/?date=2025-"+month+"-"+day+"";
+        SimpleDateFormat link_year = new SimpleDateFormat("yyyy", Locale.getDefault());
+
+        String url = sourceURL+"?date="+link_year.format(currentYear)+"-"+month+"-"+day;
+        Log.d("Получение данных о фильме по ссылке", url);
 
         List<String> movieList = new ArrayList<>();
         ArrayAdapter<String> movieAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, movieList);
@@ -267,10 +264,14 @@ public class MovieActivity extends AppCompatActivity {
     }
     public void loadMovieSession(String movieName, String date) {
         String[] parseDate = formatDateForParser(date);
+        Date currentYear = new Date();
 
         String day = parseDate[0];
         String month = parseDate[1];
-        String url = "https://firstmall.ru/radugarub/kino/?date=2025-"+month+"-"+day+"";
+        SimpleDateFormat link_year = new SimpleDateFormat("yyyy", Locale.getDefault());
+
+        String url = sourceURL+"?date="+link_year.format(currentYear)+"-"+month+"-"+day;
+        Log.d("Получение данных о сеансах по ссылке", url);
 
         Map<String, String[]> movieSessions = new HashMap<>();
 
@@ -385,6 +386,8 @@ public class MovieActivity extends AppCompatActivity {
         String month = parseDate[1];
 
         String movie_date = day+"."+month;
+        Date ticketYear = new Date();
+        SimpleDateFormat T_year = new SimpleDateFormat("yyyy-h:m:s", Locale.getDefault());
 
         TicketCreator ticket = new TicketCreator();
 
@@ -393,7 +396,7 @@ public class MovieActivity extends AppCompatActivity {
                 movie_date, movie_time.getSelectedItem().toString(),
                 hall_row.getSelectedItem().toString(), hall_places.getText().toString(), movie_hall.getSelectedItem().toString());
 
-        ticket.saveTicket(this, bitmap, movie_date, movie_time.toString(), folderName);
+        ticket.saveTicket(this, bitmap, movie_date, T_year.format(ticketYear), folderName);
     }
 
 }

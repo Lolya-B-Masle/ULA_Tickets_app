@@ -158,6 +158,4 @@ public class ConcertActivity extends AppCompatActivity {
                 concert_row_field.getText().toString(), concert_place_field.getText().toString(), concert_hall_field.getText().toString());
         ticket.saveTicket(this, bitmap, concert_date_field.getText().toString(), concert_time_field.getText().toString(), folderName);
     }
-
-
 }

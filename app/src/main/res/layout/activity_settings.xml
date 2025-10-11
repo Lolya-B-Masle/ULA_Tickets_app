@@ -219,6 +219,4 @@
                 android:text="@string/save_btn" />
         </LinearLayout>
     </LinearLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
