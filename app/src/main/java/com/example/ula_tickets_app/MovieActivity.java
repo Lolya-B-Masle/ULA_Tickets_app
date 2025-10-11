@@ -52,7 +52,7 @@ public class MovieActivity extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     private FrameLayout progressBar;
     private final String MAIN_FOLDER = "БИЛЕТЫ_В_КИНО";
-    private final String sourceURL = "https://perviymall.ru/radugarub/kino/", userAgent = "Chrome/96.0.4664.93 Safari/537.36", referrer = "https://google.com";
+    private final String sourceURL = "https://firstmall.ru/radugarub/kino/", userAgent = "Chrome/96.0.4664.93 Safari/537.36", referrer = "https://google.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +102,7 @@ public class MovieActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         hall_row.setAdapter(adapter);
 
-        for (int i = 1; i < 9; i++){
+        for (int i = 1; i < 10; i++){
             rowList.add(i);
             adapter.notifyDataSetChanged();
         }
@@ -152,7 +152,7 @@ public class MovieActivity extends AppCompatActivity {
 
                 String WA = CacheHelper.getFromCache(this, "WA", "false");
                 if (WA.equals("true"))
-                    openWhatsApp("");
+                    openWhatsApp(" ");
 
                 new Handler().postDelayed(() -> v.setEnabled(true), 5000);
             }
@@ -232,7 +232,7 @@ public class MovieActivity extends AppCompatActivity {
 
         String day = parseDate[0];
         String month = parseDate[1];
-        String url = "https://perviymall.ru/radugarub/kino/?date=2025-"+month+"-"+day+"";
+        String url = "https://firstmall.ru/radugarub/kino/?date=2025-"+month+"-"+day+"";
 
         List<String> movieList = new ArrayList<>();
         ArrayAdapter<String> movieAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, movieList);
@@ -270,7 +270,7 @@ public class MovieActivity extends AppCompatActivity {
 
         String day = parseDate[0];
         String month = parseDate[1];
-        String url = "https://perviymall.ru/radugarub/kino/?date=2025-"+month+"-"+day+"";
+        String url = "https://firstmall.ru/radugarub/kino/?date=2025-"+month+"-"+day+"";
 
         Map<String, String[]> movieSessions = new HashMap<>();
 
