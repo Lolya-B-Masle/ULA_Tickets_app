@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_version">Версия 3.00</string>
+    <string name="app_version">Версия 3.10</string>
 
     <string name="movie_page_title">Билет в кино</string>
     <string name="concert_page_title">Билет на концерт</string>
